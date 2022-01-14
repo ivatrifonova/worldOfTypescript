@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import {engine} from './Engine/Engine';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent {
   executeCommand() {
     const commands = this.inputArea.nativeElement.value.split(' ');
     console.log(commands);
-    debugger;
+    console.log(engine.createUnit(commands[2], commands[5], commands[3], commands[4]));
+    // debugger;
     const command = commands[0];
     switch (command) {
       default:

@@ -1,8 +1,8 @@
 import WorldObject from './worldObject.model';
-import { UnitType, Team } from '../Enums/Enums';
-import { Position } from '../Interfaces/Position.interface';
+import { UnitType, TeamType } from '../Enums/Enums';
+import { Position } from '../Interfaces/Interfaces';
 
-class Unit extends WorldObject {
+export class Unit extends WorldObject {
   constructor(
     private _name: string,
     private _attack: number,
@@ -13,8 +13,20 @@ class Unit extends WorldObject {
     _healthPoints: number,
     _position: Position,
     _canMove: boolean,
-    _team: Team
+    _team: TeamType
   ) {
     super(_isDestroyed, _healthPoints, _position, _canMove, _team);
+  }
+
+  attack() {
+
+  }
+
+  gather() {
+
+  }
+
+  go(coordinates: Position) {
+    
   }
 }

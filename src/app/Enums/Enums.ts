@@ -11,7 +11,7 @@ export enum UnitType {
   Giant = 'GIANT',
 }
 
-export enum Team {
+export enum TeamType {
   Blue = 'BLUE',
   Red = 'RED',
   Neutral = 'NEUTRAL',
