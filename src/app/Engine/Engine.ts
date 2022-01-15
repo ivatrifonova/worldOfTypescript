@@ -6,11 +6,11 @@ import { Position } from "../Models/Position.model";
 import {Team} from "../Models/Team.model"; 
 
 class Engine {
-    private _redTeam: Team;
-    private _blueTeam: Team;
+    private _units: Unit[];
+    private _resources: Resource[];
     constructor() {
-        this._redTeam = new Team(TeamType.Red);
-        this._blueTeam = new Team(TeamType.Blue);
+        this._units = [];
+        this._resources = [];
     }
 
     createUnit(name: string, type: string, position: string, team: string): string {
@@ -20,20 +20,26 @@ class Engine {
             const positionCoordinates = utils.convertCoordinatesFromStringToNumber(position);
             const unitPosition = new Position(positionCoordinates[0], positionCoordinates[1]);
             const neededStringForTeam = utils.selectTeam(team);
+            // what if the UnitType is INVALID ?
             switch (unitType) {
                 case "peasant": 
                     newUnit = new Unit(name, 25, 10, true, UnitType.Peasant, false, 50, unitPosition, true, neededStringForTeam);
-                    console.log(newUnit)
+                    this._units.push(newUnit);
                 break;
                 case "guard": 
                     newUnit = new Unit(name, 30, 20, false, UnitType.Guard, false, 80, unitPosition, true, neededStringForTeam);
+                    this._units.push(newUnit);
                 break;
                 case "ninja": 
                     newUnit = new Unit(name, 50, 10, false, UnitType.Ninja, false, 80, unitPosition, true, neededStringForTeam);
+                    this._units.push(newUnit);
                 break;
                 case "giant":
                     newUnit = new Unit(name, 40, 20, true, UnitType.Giant, false, 90, unitPosition, true, neededStringForTeam);
+                    this._units.push(newUnit);
                 break;
+                default: 
+                    
             }
         } catch(error) {
             return `Error: ${error}`;
