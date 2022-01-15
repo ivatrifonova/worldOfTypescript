@@ -1,9 +1,10 @@
 import { Unit } from "../Models/Unit.model";
 import { Resource } from "../Models/Resource.model";
-import { UnitType, TeamType } from "../Enums/Enums";
+import { UnitType, TeamType, ResourceTypes } from "../Enums/Enums";
 import utils from "../Models/Utils.model";
 import { Position } from "../Models/Position.model";
 import {Team} from "../Models/Team.model"; 
+
 
 class Engine {
     private _units: Unit[];
@@ -13,6 +14,14 @@ class Engine {
         this._resources = [];
     }
 
+    get units (): Unit[] {
+        return this._units;
+    }
+    
+    get resources (): Resource[] {
+        return this._resources;
+    }
+
     createUnit(name: string, type: string, position: string, team: string): string {
         try {
             let newUnit: Unit;
@@ -20,7 +29,8 @@ class Engine {
             const positionCoordinates = utils.convertCoordinatesFromStringToNumber(position);
             const unitPosition = new Position(positionCoordinates[0], positionCoordinates[1]);
             const neededStringForTeam = utils.selectTeam(team);
-            // what if the UnitType is INVALID ?
+            const nameCheck = utils.validateName(name);
+            
             switch (unitType) {
                 case "peasant": 
                     newUnit = new Unit(name, 25, 10, true, UnitType.Peasant, false, 50, unitPosition, true, neededStringForTeam);
@@ -39,6 +49,7 @@ class Engine {
                     this._units.push(newUnit);
                 break;
                 default: 
+                throw new Error(`Unit type ${type} does not exist!`)
                     
             }
         } catch(error) {
@@ -46,8 +57,39 @@ class Engine {
         }
         return `Created ${type} from ${team} team named ${name} at position ${position}`;
     }
+    
+    createResource(quantity: number, type: string, position: string): string {
+        try{
+            let newResource: Resource;
+            let resourceType = type.toLowerCase();
+            let positionCoordinates = utils.convertCoordinatesFromStringToNumber(position);
+            const resourcePosition = new Position(positionCoordinates[0], positionCoordinates[1])
+            const isPlaceAvailable = utils.checkPlaceForAvailability(resourcePosition);
+            const checkResourceType = utils.checkResourceType(resourceType);
+            const checkQuantity = utils.checkQuantity(quantity);
 
-    createResource(): void {
+            switch(resourceType) {
+                case "food": 
+                    newResource = new Resource(quantity, ResourceTypes.Food, false, quantity, resourcePosition, false, TeamType.Neutral)
+                    this._resources.push(newResource);
+                break;
+                case "lumber": 
+                    newResource = new Resource(quantity, ResourceTypes.Lumber, false, quantity, resourcePosition, false, TeamType.Neutral)
+                    this._resources.push(newResource);
+                    console.log(newResource);
+                    break;
+                case "iron": 
+                    newResource = new Resource(quantity, ResourceTypes.Iron, false, quantity, resourcePosition, false, TeamType.Neutral)
+                    this._resources.push(newResource);
+                    break;
+                default: 
+                    throw new Error(`Resource type ${type} does not exist!`)
+            }  
+        }catch(error) {
+            return `Error: ${error}`;
+        }
+        return `‘Created ${type} at position ${position} with ${quantity} health’`;
+        
 
     }
 
