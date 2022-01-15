@@ -16,4 +16,3 @@ export enum TeamType {
   Red = 'RED',
   Neutral = 'NEUTRAL',
 }
-
