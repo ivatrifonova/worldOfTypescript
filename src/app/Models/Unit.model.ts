@@ -17,16 +17,12 @@ export class Unit extends WorldObject {
   ) {
     super(_isDestroyed, _healthPoints, _position, _canMove, _team);
   }
-
-  attack() {
-
+  get name(): string {
+    return this._name;
   }
+  attack() {}
 
-  gather() {
+  gather() {}
 
-  }
-
-  go(coordinates: Position) {
-    
-  }
+  go(coordinates: Position) {}
 }
