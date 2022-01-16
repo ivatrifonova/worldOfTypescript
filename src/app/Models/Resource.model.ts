@@ -14,4 +14,12 @@ export class Resource extends WorldObject {
   ) {
     super(_isDestroyed, _healthPoints, _position, _canMove, _team);
   }
+
+  get quantity(): number {
+    return this._quantity;
+  }
+
+  get type(): ResourceTypes {
+    return this._type;
+  }
 }

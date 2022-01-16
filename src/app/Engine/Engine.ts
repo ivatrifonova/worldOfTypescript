@@ -80,7 +80,6 @@ class Engine {
                 case "lumber": 
                     newResource = new Resource(convertedQuantity, ResourceTypes.Lumber, false, convertedQuantity, resourcePosition, false, TeamType.Neutral)
                     this._resources.push(newResource);
-                    console.log(newResource);
                     break;
                 case "iron": 
                     newResource = new Resource(convertedQuantity, ResourceTypes.Iron, false, convertedQuantity, resourcePosition, false, TeamType.Neutral)
@@ -100,16 +99,16 @@ class Engine {
     show([,type,team]: string) {
     switch(type) {
         case "all": 
-        show.showAll()
+        console.log(show.showAll());
         break;
         case "units": 
-        show.showUnits(team);
+        console.log(show.showUnits(team));
         break;
         case "resources": 
-        show.showResources();
+        console.log(show.showResources());
         break;
         case "coordinates":
-        show.showCoordinates();
+        show.showCoordinates(team);
     } 
     }
 

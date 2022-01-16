@@ -12,6 +12,10 @@ export default abstract class WorldObject {
     private _team: TeamType = TeamType.Neutral
   ) {}
 
+  get team(): TeamType {
+    return this._team;
+  }
+
   modifyPosition(coordinates: string) {
     try{
       const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);

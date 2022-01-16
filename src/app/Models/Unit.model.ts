@@ -20,6 +20,11 @@ export class Unit extends WorldObject {
   get name(): string {
     return this._name;
   }
+
+  get type(): string {
+    return this._type;
+  } 
+
   attack() {}
 
   gather() {}
