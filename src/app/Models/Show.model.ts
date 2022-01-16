@@ -13,21 +13,21 @@ showUnits(team: string): string {
 
 showResources(): string {
     const allResourcesMessage = engine.resources.map(resource => 
-        `Resource ${resource.type} with amount of ${resource.quantity} at location ${Object.values(resource.position).toString()}`).join("; ");
+        `Resource ${resource.type} with amount of ${resource.healthPoints} at location ${Object.values(resource.position).toString()}`).join("; ");
     return engine.resources.length > 0 ? allResourcesMessage : `There are NO resources in the game!`;
 }
 
 showCoordinates(coordinates: string): void {
-    const presenseCheck = engine.units.find(unit => Object.values(unit.position).toString() === coordinates)
+    const presenceAtLocation = engine.units.filter(unit => Object.values(unit.position).toString() === coordinates)
     || engine.resources.find(resource => Object.values(resource.position).toString() === coordinates) 
     || `Coordinates: ${coordinates} are empty!`;
     
-    console.log(presenseCheck);
+    console.log(presenceAtLocation);
 }
 
 showAll(): string {
     const allUnits = engine.units.map(unit => [unit.name, unit.type]);
-    const allResources = engine.resources.map(resource => [resource.type, resource.quantity]);
+    const allResources = engine.resources.map(resource => [resource.type, resource.healthPoints]);
     const message = `The game field comprises of ${allUnits.length} units: ${allUnits.join("; ")} \n 
     and ${allResources.length} resources: ${allResources}`;
 
@@ -35,7 +35,7 @@ showAll(): string {
 }
 
 showResults() {
-    // const blueTeamPoints: number = engine.resources.reduce((prevResource, currResource) => prevResource.quantity + currResource)
+    // const blueTeamPoints: number = engine.resources.reduce((prevResource, currResource) => prevResource.healthPoints + currResource)
 
     // return blueTeamPoints;
 }

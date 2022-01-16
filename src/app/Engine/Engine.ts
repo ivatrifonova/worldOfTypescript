@@ -93,13 +93,13 @@ class Engine {
   show([, type, team]: string) {
     switch (type) {
       case 'all':
-        show.showAll();
+        console.log(show.showAll());
         break;
       case 'units':
-        show.showUnits(team);
+        console.log(show.showUnits(team));
         break;
       case 'resources':
-        show.showResources();
+        console.log(show.showResources());
         break;
       case 'coordinates':
         show.showCoordinates(team);

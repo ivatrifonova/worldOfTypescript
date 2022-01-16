@@ -15,10 +15,6 @@ export class Resource extends WorldObject {
     
   }
 
-  get quantity(): number {
-    return this._quantity;
-  }
-
   get type(): ResourceTypes {
     return this._type;
   }

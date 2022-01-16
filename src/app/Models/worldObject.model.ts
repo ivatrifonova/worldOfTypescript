@@ -16,6 +16,10 @@ export default abstract class WorldObject {
     return this._team;
   }
 
+  get healthPoints(): number {
+    return this._healthPoints;
+  }
+
   modifyPosition(coordinates: string) {
       const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
 

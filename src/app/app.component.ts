@@ -24,6 +24,7 @@ export class AppComponent {
         // engine.order()
         break;
       case 'show':
+        // debugger;
         engine.show(commands);
     }
   }
