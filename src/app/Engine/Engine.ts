@@ -4,6 +4,7 @@ import { UnitType, TeamType, ResourceTypes } from "../Enums/Enums";
 import utils from "../Models/Utils.model";
 import { Position } from "../Models/Position.model";
 import {Team} from "../Models/Team.model"; 
+import show from "../Models/Show.model"
 
 
 class Engine {
@@ -93,24 +94,20 @@ class Engine {
 
     }
 
-    showParameters() {
-
-    }
-
-    showAll() {
-
-    }
-
-    showUnits() {
-
-    }
-
-    showResources() {
-
-    }
-
-    findCoordinates() {
-        
+    show(type: string) {
+    switch(type) {
+        case "all": 
+        show.showAll()
+        break;
+        case "units": 
+        show.showUnits();
+        break;
+        case "resources": 
+        show.showResources();
+        break;
+        case "coordinates":
+        show.showCoordinates();
+    } 
     }
 }
 

@@ -11,15 +11,28 @@ export default abstract class WorldObject {
     private _canMove: boolean = true,
     private _team: TeamType = TeamType.Neutral
   ) {}
-  modifyPosition(position: string) {
-    const coordinates = utils.convertCoordinatesFromStringToNumber(position);
-    const newCoordinatesObject = new Position(coordinates[0], coordinates[1]);
-    this._position = newCoordinatesObject;
-    console.log(`Unit was succsesfuly move to position ${position}`);
+
+  modifyPosition(coordinates: string) {
+    try{
+      const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
+
+      utils.validatePosition(convertedCoordinates);
+
+      const position = utils.createPosition(convertedCoordinates);
+
+      this._position = position;
+
+      console.log(`Unit was succsesfuly move to position ${position}`);
+    } catch(error) {
+       throw new Error(`${error}`);
+    }
+   
   }
+  
   get position():Position {
     return this._position;
   }
+
   modifyHealthPoints(points:number) {
     this._healthPoints = points;
   }
