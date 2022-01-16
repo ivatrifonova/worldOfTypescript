@@ -47,6 +47,16 @@ class Utils {
       throw new Error("Please provide valid quantity!")
     }
   }
+
+  createPosition(coordinates: number[]): Position {
+    return new Position(coordinates[0], coordinates[1])
+  }
+
+  validatePosition(coordinates: number[]) {
+    if(coordinates[0] < 0 || coordinates[1] < 0) {
+      throw new Error(`Coordinates are not valid.`)
+    }
+  }
 }
 
 let utils = new Utils();

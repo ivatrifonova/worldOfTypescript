@@ -24,5 +24,4 @@ export class Unit extends WorldObject {
 
   gather() {}
 
-  go(coordinates: Position) {}
 }
