@@ -1,5 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import {engine} from './Engine/Engine';
+import { engine } from './Engine/Engine';
+import show from './Models/Show.model';
+import WorldObject from './Models/worldObject.model';
 
 @Component({
   selector: 'app-root',
@@ -14,14 +16,17 @@ export class AppComponent {
 
   executeCommand() {
     const commands = this.inputArea.nativeElement.value.split(' ');
-    // console.log(commands);
-    // console.log(engine.createUnit(commands[2], commands[5], commands[3], commands[4]));
-    console.log(engine.createResource(commands[4], commands[2], commands[3]))
-    // debugger;
     const command = commands[0];
+
     switch (command) {
-      default:
+      case 'create':
+        console.log(commands[1] === "unit"? engine.createUnit(commands) : engine.createResource(commands))
         break;
+      case 'order':
+        // engine.order()
+        break;
+      case 'show':
+        engine.show(commands);
     }
   }
 }
