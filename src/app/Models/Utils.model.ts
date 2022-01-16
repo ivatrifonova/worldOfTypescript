@@ -1,6 +1,7 @@
 import { TeamType } from '../Enums/Enums';
 import { engine } from '../Engine/Engine';
 import { Position } from './Position.model';
+import { Unit } from './Unit.model';
 
 class Utils {
   convertCoordinatesFromStringToNumber(coordinates: string): number[] {
@@ -26,36 +27,42 @@ class Utils {
       throw new Error(`The length should be less than 20 characters`);
     }
   }
-  
+
   checkPlaceForAvailability(position: Position) {
-  let place = engine.resources.some(unit => unit.position.x === position.x && unit.position.y === position.y)
-  if(place) {
-    throw new Error(`This place is already taken.`)
-  } else {
-    return place;
-  }
+    let place = engine.resources.some(
+      (unit) => unit.position.x === position.x && unit.position.y === position.y
+    );
+    if (place) throw new Error(`This place is already taken.`);
   }
 
   checkResourceType(type: string): void {
-    if(type !== "iron" && type !== "lumber" && type !== "food") {
-    throw new Error(`Resource type ${type} does not exist!`)
+    if (type !== 'iron' && type !== 'lumber' && type !== 'food') {
+      throw new Error(`Resource type ${type} does not exist!`);
     }
   }
 
   checkQuantity(quantity: number) {
-    if(quantity < 1) {
-      throw new Error("Please provide valid quantity!")
+    if (quantity < 1) {
+      throw new Error('Please provide valid quantity!');
     }
   }
 
   createPosition(coordinates: number[]): Position {
-    return new Position(coordinates[0], coordinates[1])
+    return new Position(coordinates[0], coordinates[1]);
   }
 
   validatePosition(coordinates: number[]) {
-    if(coordinates[0] < 0 || coordinates[1] < 0) {
-      throw new Error(`Coordinates are not valid.`)
+    if (coordinates[0] < 0 || coordinates[1] < 0) {
+      throw new Error(`Coordinates are not valid.`);
     }
+  }
+
+  findUnit(unitName: string): Unit {
+    let wantedUnit = engine.units.find(
+      (currentUnit) => currentUnit.name === unitName
+    );
+    if (wantedUnit) return wantedUnit;
+    else throw new Error(`This user does not exist.`);
   }
 }
 
