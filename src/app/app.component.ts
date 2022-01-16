@@ -1,7 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { engine } from './Engine/Engine';
-import show from './Models/Show.model';
-import WorldObject from './Models/worldObject.model';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +18,7 @@ export class AppComponent {
 
     switch (command) {
       case 'create':
-        console.log(commands[1] === "unit"? engine.createUnit(commands) : engine.createResource(commands))
+       (commands[1] === "unit"? engine.createUnit(commands) : engine.createResource(commands))
         break;
       case 'order':
         // engine.order()
