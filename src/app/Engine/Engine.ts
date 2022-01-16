@@ -23,7 +23,7 @@ class Engine {
         return this._resources;
     }
 
-    createUnit(name: string, type: string, position: string, team: string): string {
+    createUnit([,,name, position, team, type] : string): string {
         try {
             let newUnit: Unit;
             const unitType = type.toLowerCase();
@@ -31,6 +31,7 @@ class Engine {
             const unitPosition = new Position(positionCoordinates[0], positionCoordinates[1]);
             const neededStringForTeam = utils.selectTeam(team);
             const nameCheck = utils.validateName(name);
+        
             
             switch (unitType) {
                 case "peasant": 
@@ -59,7 +60,7 @@ class Engine {
         return `Created ${type} from ${team} team named ${name} at position ${position}`;
     }
     
-    createResource(quantity: number, type: string, position: string): string {
+    createResource([,,type, position,quantity] : string): string {
         try{
             let newResource: Resource;
             let resourceType = type.toLowerCase();
@@ -67,20 +68,22 @@ class Engine {
             const resourcePosition = new Position(positionCoordinates[0], positionCoordinates[1])
             const isPlaceAvailable = utils.checkPlaceForAvailability(resourcePosition);
             const checkResourceType = utils.checkResourceType(resourceType);
-            const checkQuantity = utils.checkQuantity(quantity);
+            const convertedQuantity = Number(quantity)
+            const checkQuantity = utils.checkQuantity(convertedQuantity);
+       
 
             switch(resourceType) {
                 case "food": 
-                    newResource = new Resource(quantity, ResourceTypes.Food, false, quantity, resourcePosition, false, TeamType.Neutral)
+                    newResource = new Resource(convertedQuantity, ResourceTypes.Food, false, convertedQuantity, resourcePosition, false, TeamType.Neutral)
                     this._resources.push(newResource);
                 break;
                 case "lumber": 
-                    newResource = new Resource(quantity, ResourceTypes.Lumber, false, quantity, resourcePosition, false, TeamType.Neutral)
+                    newResource = new Resource(convertedQuantity, ResourceTypes.Lumber, false, convertedQuantity, resourcePosition, false, TeamType.Neutral)
                     this._resources.push(newResource);
                     console.log(newResource);
                     break;
                 case "iron": 
-                    newResource = new Resource(quantity, ResourceTypes.Iron, false, quantity, resourcePosition, false, TeamType.Neutral)
+                    newResource = new Resource(convertedQuantity, ResourceTypes.Iron, false, convertedQuantity, resourcePosition, false, TeamType.Neutral)
                     this._resources.push(newResource);
                     break;
                 default: 
@@ -94,13 +97,13 @@ class Engine {
 
     }
 
-    show(type: string) {
+    show([,type,team]: string) {
     switch(type) {
         case "all": 
         show.showAll()
         break;
         case "units": 
-        show.showUnits();
+        show.showUnits(team);
         break;
         case "resources": 
         show.showResources();
@@ -109,6 +112,8 @@ class Engine {
         show.showCoordinates();
     } 
     }
+
+    
 }
 
 export const engine = new Engine();

@@ -28,7 +28,7 @@ class Utils {
   }
   
   checkPlaceForAvailability(position: Position) {
-  let place = engine.units.some(unit => unit.position.x === position.x && unit.position.y === position.y)
+  let place = engine.resources.some(unit => unit.position.x === position.x && unit.position.y === position.y)
   if(place) {
     throw new Error(`This place is already taken.`)
   } else {
