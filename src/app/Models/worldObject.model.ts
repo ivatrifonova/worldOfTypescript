@@ -12,6 +12,14 @@ export default abstract class WorldObject {
     private _team: TeamType = TeamType.Neutral
   ) {}
 
+  get team(): TeamType {
+    return this._team;
+  }
+
+  get healthPoints(): number {
+    return this._healthPoints;
+  }
+
   modifyPosition(coordinates: string) {
     utils.validatePosition(coordinates);
 
