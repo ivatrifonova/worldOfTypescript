@@ -17,12 +17,18 @@ showResources(): string {
     return engine.resources.length > 0 ? allResourcesMessage : `There are NO resources in the game!`;
 }
 
-showCoordinates(coordinates: string): void {
-    const presenceAtLocation = engine.units.filter(unit => Object.values(unit.position).toString() === coordinates)
-    || engine.resources.find(resource => Object.values(resource.position).toString() === coordinates) 
-    || `Coordinates: ${coordinates} are empty!`;
+showCoordinates(coordinates: string):string{
+    const presenceAtLocation = engine.units.filter(unit => Object.values(unit.position).toString() === coordinates);
+    let unitMessage:string;
+    debugger;
+    if(presenceAtLocation.length > 0) {
+        debugger;
+        unitMessage = presenceAtLocation.map(unit => `Unit ${unit.name} of type ${unit.type} on team ${unit.team}`).join("; ")
+    } else {
+        unitMessage =  `Coordinates: ${coordinates} are empty!`;
+    }
     
-    console.log(presenceAtLocation);
+    return unitMessage;
 }
 
 showAll(): string {

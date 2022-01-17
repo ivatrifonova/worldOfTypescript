@@ -18,14 +18,14 @@ export class AppComponent {
 
     switch (command) {
       case 'create':
-      engine.create(commands);
+      this.outputMessages.push(engine.create(commands));
         break;
       case 'order':
-        engine.order(commands);
+        debugger;
+        this.outputMessages.push(engine.order(commands));
         break;
       case 'show':
-        // debugger;
-        engine.show(commands);
+        this.outputMessages.push(engine.show(commands));
     }
   }
 }

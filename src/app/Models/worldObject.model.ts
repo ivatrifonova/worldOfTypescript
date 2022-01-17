@@ -20,6 +20,18 @@ export default abstract class WorldObject {
     return this._healthPoints;
   }
 
+  set healthPoints(points: number) {
+    this.healthPoints = points;
+  }
+
+  get isDestroyed(): boolean {
+    return this._isDestroyed;
+  }
+
+  set isDestroyed(destroyed: boolean) {
+    this._isDestroyed = destroyed;
+  }
+
   modifyPosition(coordinates: string) {
     utils.validatePosition(coordinates);
 
@@ -34,6 +46,6 @@ export default abstract class WorldObject {
   }
 
   modifyHealthPoints(points: number) {
-    this._healthPoints = points;
+    this._healthPoints += points;
   }
 }
