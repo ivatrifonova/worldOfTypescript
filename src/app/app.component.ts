@@ -18,14 +18,14 @@ export class AppComponent {
 
     switch (command) {
       case 'create':
-       (commands[1] === "unit"? engine.createUnit(commands) : engine.createResource(commands))
+      this.outputMessages.push(engine.create(commands));
         break;
       case 'order':
-        // engine.order()
+        debugger;
+        this.outputMessages.push(engine.order(commands));
         break;
       case 'show':
-        // debugger;
-        engine.show(commands);
+        this.outputMessages.push(engine.show(commands));
     }
   }
 }

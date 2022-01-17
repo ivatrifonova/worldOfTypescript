@@ -20,24 +20,32 @@ export default abstract class WorldObject {
     return this._healthPoints;
   }
 
-  modifyPosition(coordinates: string) {
-      const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
-
-      utils.validatePosition(convertedCoordinates);
-
-      const position = utils.createPosition(convertedCoordinates);
-
-      this._position = position;
-
-      console.log(`Unit was succsesfuly move to position ${position}`);
- 
-   
+  set healthPoints(points: number) {
+    this.healthPoints = points;
   }
-  get position():Position {
+
+  get isDestroyed(): boolean {
+    return this._isDestroyed;
+  }
+
+  set isDestroyed(destroyed: boolean) {
+    this._isDestroyed = destroyed;
+  }
+
+  modifyPosition(coordinates: string) {
+    utils.validatePosition(coordinates);
+
+    const position = utils.createPosition(coordinates);
+
+    this._position = position;
+
+    console.log(`Unit was successfully moved to position ${position}`);
+  }
+  get position(): Position {
     return this._position;
   }
-  
-  modifyHealthPoints(points:number) {
-    this._healthPoints = points;
+
+  modifyHealthPoints(points: number) {
+    this._healthPoints += points;
   }
 }
