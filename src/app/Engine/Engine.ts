@@ -4,6 +4,7 @@ import { UnitType, ResourceTypes } from '../Enums/Enums';
 import utils from '../Models/Utils.model';
 
 import show from '../Models/Show.model';
+import { create } from 'domain';
 
 class Engine {
   private _units: Unit[];
@@ -13,49 +14,86 @@ class Engine {
     this._resources = [];
   }
 
-  get units(): Unit[] {
+  public get units(): Unit[] {
     return this._units;
   }
 
-  get resources(): Resource[] {
+  public get resources(): Resource[] {
     return this._resources;
   }
 
-  createUnit([, , name, position, team, type]: string) {
-      let newUnit: Unit;
-      const unitType = type.toLowerCase();
-      const positionCoordinates = utils.convertCoordinatesFromStringToNumber(position);
-      const unitPosition = utils.createPosition(positionCoordinates)
-      const teamType = utils.selectTeam(team);
+  public createUnit([, , name, position, team, type]: string[]): void {
+    let newUnit: Unit;
+    const unitType = type.toLowerCase();
+    const unitPosition = utils.createPosition(position);
+    const teamType = utils.selectTeam(team);
 
-      utils.validateName(name);
+    utils.validatePosition(position);
+    utils.validateName(name);
+    
 
-      switch (unitType) {
-        case 'peasant':
-          newUnit = new Unit(name,25,10,UnitType.Peasant,50,unitPosition,teamType);
-          break;
-        case 'guard':
-          newUnit = new Unit(name,30,20,UnitType.Guard,80,unitPosition,teamType,false);
-          break;
-        case 'ninja':
-          newUnit = new Unit(name,50,10,UnitType.Ninja,80,unitPosition,teamType,false);
-          break;
-        case 'giant':
-          newUnit = new Unit(name,40,20,UnitType.Giant,90,unitPosition,teamType,true);
-          break;
-        default:
-          throw new Error(`Unit type ${type} does not exist!`);
-      }
-      this._units.push(newUnit);
-    console.log(`Created ${type} from ${team} team named ${name} at position ${position}`);
+    switch (unitType) {
+      case 'peasant':
+        newUnit = new Unit(
+          name,
+          25,
+          10,
+          UnitType.Peasant,
+          50,
+          unitPosition,
+          teamType
+        );
+        break;
+      case 'guard':
+        newUnit = new Unit(
+          name,
+          30,
+          20,
+          UnitType.Guard,
+          80,
+          unitPosition,
+          teamType,
+          false
+        );
+        break;
+      case 'ninja':
+        newUnit = new Unit(
+          name,
+          50,
+          10,
+          UnitType.Ninja,
+          80,
+          unitPosition,
+          teamType,
+          false
+        );
+        break;
+      case 'giant':
+        newUnit = new Unit(
+          name,
+          40,
+          20,
+          UnitType.Giant,
+          90,
+          unitPosition,
+          teamType,
+          true
+        );
+        break;
+      default:
+        throw new Error(`Unit type ${type} does not exist!`);
+    }
+    this._units.push(newUnit);
+    console.log(
+      `Created ${type} from ${team} team named ${name} at position ${position}`
+    );
   }
 
-  createResource([, , type, position, quantity]: string): void{
+  public createResource([, , type, position, quantity]: string[]): void {
     let newResource: Resource;
     const resourceType = type.toLowerCase();
     const convertedQuantity = Number(quantity);
-    const positionCoordinates = utils.convertCoordinatesFromStringToNumber(position);
-    const resourcePosition = utils.createPosition(positionCoordinates);
+    const resourcePosition = utils.createPosition(position);
 
     utils.checkPlaceForAvailability(resourcePosition);
     utils.checkResourceType(resourceType);
@@ -87,10 +125,12 @@ class Engine {
         throw new Error(`Resource type ${type} does not exist!`);
     }
     this._resources.push(newResource);
-    console.log(`Created ${type} at position ${position} with ${quantity} health`);
+    console.log(
+      `Created ${type} at position ${position} with ${quantity} health`
+    );
   }
 
-  show([, type, team]: string) {
+  public show([, type, team]: string[]): void {
     switch (type) {
       case 'all':
         show.showAll();
@@ -106,7 +146,7 @@ class Engine {
     }
   }
 
-  order([, currentUnit, type]: string) {
+  public order([, currentUnit, type]: string[]): void {
     const unit = utils.findUnit(currentUnit);
 
     switch (type) {
@@ -118,6 +158,11 @@ class Engine {
         break;
       }
     }
+  }
+  public create(commands: string[]): void {
+    commands[1] === 'unit'
+      ? this.createUnit(commands)
+      : this.createResource(commands);
   }
 }
 

@@ -47,12 +47,14 @@ class Utils {
     }
   }
 
-  createPosition(coordinates: number[]): Position {
-    return new Position(coordinates[0], coordinates[1]);
+  createPosition(coordinates: string): Position {
+    const positionCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
+    return new Position(positionCoordinates[0], positionCoordinates[1]);
   }
 
-  validatePosition(coordinates: number[]) {
-    if (coordinates[0] < 0 || coordinates[1] < 0) {
+  validatePosition(coordinates: string) {
+    const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
+    if (convertedCoordinates[0] < 0 || convertedCoordinates[1] < 0) {
       throw new Error(`Coordinates are not valid.`);
     }
   }

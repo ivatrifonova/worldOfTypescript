@@ -13,23 +13,19 @@ export default abstract class WorldObject {
   ) {}
 
   modifyPosition(coordinates: string) {
-      const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
+    utils.validatePosition(coordinates);
 
-      utils.validatePosition(convertedCoordinates);
+    const position = utils.createPosition(coordinates);
 
-      const position = utils.createPosition(convertedCoordinates);
+    this._position = position;
 
-      this._position = position;
-
-      console.log(`Unit was succsesfuly move to position ${position}`);
- 
-   
+    console.log(`Unit was successfully moved to position ${position}`);
   }
-  get position():Position {
+  get position(): Position {
     return this._position;
   }
-  
-  modifyHealthPoints(points:number) {
+
+  modifyHealthPoints(points: number) {
     this._healthPoints = points;
   }
 }

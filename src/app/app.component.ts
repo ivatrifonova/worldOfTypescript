@@ -18,10 +18,10 @@ export class AppComponent {
 
     switch (command) {
       case 'create':
-       (commands[1] === "unit"? engine.createUnit(commands) : engine.createResource(commands))
+      engine.create(commands);
         break;
       case 'order':
-        // engine.order()
+        engine.order(commands);
         break;
       case 'show':
         engine.show(commands);
