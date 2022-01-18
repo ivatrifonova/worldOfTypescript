@@ -70,7 +70,7 @@ export class Unit extends WorldObject {
      There are ${deadUnits} dead units after the fight was over`;
   }
 
-  go(coordinates: string): string {
+  public go(coordinates: string): string {
     const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
     const validCoordinates = utils.checkForValidCoordinates(convertedCoordinates);
     if(validCoordinates) {
@@ -81,7 +81,7 @@ export class Unit extends WorldObject {
     }
   }
 
-  gather(): string {
+  public gather(): string {
     const resourcePresence = engine.resources.find(resource => resource.position.x === this.position.x 
       && resource.position.y === this.position.y);
 

@@ -12,31 +12,31 @@ export default abstract class WorldObject {
     private _team: TeamType = TeamType.Neutral
   ) {}
 
-  get team(): TeamType {
+  public get team(): TeamType {
     return this._team;
   }
 
-  set team(team: TeamType) {
+  public set team(team: TeamType) {
     this._team = team;
   }
 
-  get healthPoints(): number {
+  public get healthPoints(): number {
     return this._healthPoints;
   }
 
-  set healthPoints(points: number) {
+  public set healthPoints(points: number) {
     this.healthPoints = points;
   }
 
-  get isDestroyed(): boolean {
+  public get isDestroyed(): boolean {
     return this._isDestroyed;
   }
 
-  set isDestroyed(destroyed: boolean) {
+  public set isDestroyed(destroyed: boolean) {
     this._isDestroyed = destroyed;
   }
 
-  modifyPosition(coordinates: string) {
+  public modifyPosition(coordinates: string) {
     utils.validatePosition(coordinates);
 
     const position = utils.createPosition(coordinates);
@@ -45,11 +45,11 @@ export default abstract class WorldObject {
 
     console.log(`Unit was successfully moved to position ${position.x}, ${position.y}`);
   }
-  get position(): Position {
+  public get position(): Position {
     return this._position;
   }
 
-  modifyHealthPoints(points: number) {
+  public modifyHealthPoints(points: number) {
     this._healthPoints += points;
   }
 }
