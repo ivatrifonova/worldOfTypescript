@@ -49,10 +49,27 @@ class Utils {
   }
 
   public checkResourceType(type: string): string {
-    if (type !== 'iron' && type !== 'lumber' && type !== 'food') {
+    if (type.toLowerCase() !== 'iron' && type.toLowerCase() !== 'lumber' && type.toLowerCase() !== 'food') {
       return `Resource type ${type} does not exist!`;
     }
     return '';
+  }
+
+  public moveGatheredResource(resourceToMove: Resource) {
+    const resourceIndex = engine.resources.findIndex(resource => resource.position.x === resourceToMove.position.x 
+      && resource.position.y === resourceToMove.position.y);
+    engine.resources.splice(resourceIndex, 1);
+    engine.gatheredResources.push(resourceToMove);
+  }
+
+  public calculateResourceQuantity(neededResource: string, teamOfResource: TeamType): number {
+    const teamResourceFound = engine.gatheredResources.filter(resource => resource.type.toLowerCase() === neededResource
+    && resource.team === teamOfResource);
+    const teamResourceQuantity = teamResourceFound.reduce((prevResource, currResource): number => {
+      return prevResource + currResource.healthPoints
+    }, 0)
+
+    return teamResourceQuantity;
   }
 
   public validateUnit(name: string, position: string, team: string): string {

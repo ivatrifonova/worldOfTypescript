@@ -86,40 +86,22 @@ export class Unit extends WorldObject {
       && resource.position.y === this.position.y);
 
     if (resourcePresence) {
-      if (this.type === UnitType.Guard || this.type === UnitType.Ninja || 
-        this.type === UnitType.Giant && resourcePresence.type.toLowerCase() !== 'lumber') {
-          return 'You cannot gather that.';
+      const isItGiant = this.type === UnitType.Giant && resourcePresence.type.toLowerCase() !== 'lumber'
+      if (this.type === UnitType.Guard || this.type === UnitType.Ninja || isItGiant) {
+        return 'You cannot gather that.';
       }
       
       resourcePresence.team = this.team;
-      let teamFoodArr: number[] = [0];
-      let teamLumberArr: number[] = [0];
-      let teamIronArr: number[] = [0];
-
-      const resourceIndex = engine.resources.findIndex(resource => resource.position.x === resourcePresence.position.x 
-        && resource.position.y === resourcePresence.position.y);
-      engine.resources.splice(resourceIndex, 1);
-      engine.gatheredResources.push(resourcePresence);
-
-      const teamResources = engine.gatheredResources.filter(resource => resource.team === this.team);
-      
-      const teamFoodFound = teamResources.filter(resource => resource.type.toLowerCase() === 'food');
-      teamFoodFound.map(foodResource => teamFoodArr.push(foodResource.healthPoints));
-      const teamFoodQuantity =  teamFoodArr.reduce((prevFood, currFood) => prevFood + currFood);
-
-      const teamLumberFound = teamResources.filter(resource => resource.type.toLowerCase() === 'lumber');
-      teamLumberFound.map(lumberResource =>  teamLumberArr.push(lumberResource.healthPoints));
-      const teamLumberQuantity = teamLumberArr.reduce((prevLumber, currLumber) => prevLumber + currLumber);
-
-      const teamIronFound = teamResources.filter(resource => resource.type.toLowerCase() === 'iron');
-      teamIronFound.map(ironResource => teamIronArr.push(ironResource.healthPoints));
-      const teamIronQuantity = teamIronArr.reduce((prevIron, currIron) => prevIron + currIron);
+      utils.moveGatheredResource(resourcePresence);
+      const teamFoodQuantity = utils.calculateResourceQuantity('food', resourcePresence.team);
+      const teamLumberQuantity = utils.calculateResourceQuantity('lumber', resourcePresence.team);
+      const teamIronQuantity = utils.calculateResourceQuantity('iron', resourcePresence.team);
       
       return `Successfully gathered ${resourcePresence.healthPoints} ${resourcePresence.type}. 
       Team ${this.team} now has ${teamFoodQuantity} food, ${teamLumberQuantity} lumber and ${teamIronQuantity} iron.`;
     } else {
       return 'There is nothing to gather';
     }
-      
-    }
+  }
+
 }

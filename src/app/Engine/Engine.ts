@@ -3,7 +3,6 @@ import { Resource } from '../Models/Resource.model';
 import { UnitType, ResourceTypes, TeamType } from '../Enums/Enums';
 import utils from '../Models/Utils.model';
 import show from '../Models/Show.model';
-import { Position } from '../Models/Position.model';
 
 class Engine {
   private _units: Unit[];
@@ -35,7 +34,6 @@ class Engine {
     let newUnit: Unit;
     const unitType = type.toLowerCase();
     const unitPosition = utils.createPosition(position);
-debugger;
     
     const validUnit = utils.validateUnit(name, position, team);
     
