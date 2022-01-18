@@ -7,9 +7,11 @@ import show from '../Models/Show.model';
 class Engine {
   private _units: Unit[];
   private _resources: Resource[];
+  private _gatheredResources: Resource[];
   constructor() {
     this._units = [];
     this._resources = [];
+    this._gatheredResources = [];
   }
 
   public get units(): Unit[] {
@@ -18,6 +20,14 @@ class Engine {
 
   public get resources(): Resource[] {
     return this._resources;
+  }
+
+  public get gatheredResources(): Resource[] {
+    return this._gatheredResources;
+  }
+
+  public set gatheredResources(resources) {
+    this._gatheredResources = resources;
   }
 
   public createUnit([, , name, position, team, type]: string[]): string {
@@ -147,7 +157,7 @@ class Engine {
     }
   }
 
-  public order([, currentUnit, type]: string[]): string {
+  public order([, currentUnit, type, coordinates]: string[]): string {
     const unit = utils.findUnit(currentUnit);
     switch (type) {
       case 'attack':
@@ -155,6 +165,9 @@ class Engine {
       case 'gather': {
         return unit.gather();
       }
+      case `go`:
+        const numberedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
+        return utils.checkForValidCoordinates(numberedCoordinates) ? unit.go(coordinates) : 'Please enter valid coordinates!';
       default: 
       return `The order is invalid!`; 
     }

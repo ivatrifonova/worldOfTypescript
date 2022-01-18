@@ -2,11 +2,15 @@ import { TeamType } from '../Enums/Enums';
 import { engine } from '../Engine/Engine';
 import { Position } from './Position.model';
 import { Unit } from './Unit.model';
-import { unsupported } from '@angular/compiler/src/render3/view/util';
 
 class Utils {
   convertCoordinatesFromStringToNumber(coordinates: string): number[] {
     return coordinates.split(',').map((coordinate) => Number(coordinate));
+  }
+
+  checkForValidCoordinates(coordinates: number[]): boolean {
+    const areCoordinatesValid = coordinates.every(coordinate => !isNaN(coordinate));
+    return areCoordinatesValid;
   }
 
   selectTeam(team: string): TeamType {
