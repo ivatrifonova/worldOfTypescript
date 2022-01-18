@@ -8,9 +8,11 @@ import { Position } from '../Models/Position.model';
 class Engine {
   private _units: Unit[];
   private _resources: Resource[];
+  private _gatheredResources: Resource[];
   constructor() {
     this._units = [];
     this._resources = [];
+    this._gatheredResources = [];
   }
 
   public get units(): Unit[] {
@@ -19,6 +21,14 @@ class Engine {
 
   public get resources(): Resource[] {
     return this._resources;
+  }
+
+  public get gatheredResources(): Resource[] {
+    return this._gatheredResources;
+  }
+
+  public set gatheredResources(resources) {
+    this._gatheredResources = resources;
   }
 
   public createUnit([, , name, position, team, type]: string[]): string {
@@ -95,9 +105,8 @@ debugger;
     }
   }
 
-  public order([, currentUnit, type]: string[]): string {
-    const unit:Unit = utils.findUnit(currentUnit);
-    debugger;
+  public order([, currentUnit, type, coordinates]: string[]): string {
+    const unit = utils.findUnit(currentUnit);
     switch (type) {
       case 'attack':
         return unit.type === UnitType.Ninja
@@ -106,8 +115,11 @@ debugger;
       case 'gather': {
         return unit.gather();
       }
-      default:
-        return `The order is invalid!`;
+      case `go`:
+        const numberedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
+        return utils.checkForValidCoordinates(numberedCoordinates) ? unit.go(coordinates) : 'Please enter valid coordinates!';
+      default: 
+      return `The order is invalid!`; 
     }
   }
   public create(commands: string[]): string {

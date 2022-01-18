@@ -16,6 +16,10 @@ export default abstract class WorldObject {
     return this._team;
   }
 
+  set team(team: TeamType) {
+    this._team = team;
+  }
+
   get healthPoints(): number {
     return this._healthPoints;
   }
@@ -39,7 +43,7 @@ export default abstract class WorldObject {
 
     this._position = position;
 
-    console.log(`Unit was successfully moved to position ${position}`);
+    console.log(`Unit was successfully moved to position ${position.x}, ${position.y}`);
   }
   get position(): Position {
     return this._position;

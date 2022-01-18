@@ -19,8 +19,14 @@ class Utils {
         return TeamType.Red;
       default: 
       return TeamType.Neutral;
+
     }
   }
+  checkForValidCoordinates(coordinates: number[]): boolean {
+    const areCoordinatesValid = coordinates.every(coordinate => !isNaN(coordinate));
+    return areCoordinatesValid;
+  }
+
 
   validateName(name: string): string {
     let doesNameExist = engine.units.some((unit) => unit.name === name);

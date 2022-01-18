@@ -21,7 +21,6 @@ export class AppComponent {
       this.outputMessages.push(engine.create(commands));
         break;
       case 'order':
-        debugger;
         this.outputMessages.push(engine.order(commands));
         break;
       case 'show':
