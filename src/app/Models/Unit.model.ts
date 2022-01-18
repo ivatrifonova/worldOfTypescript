@@ -36,17 +36,17 @@ export class Unit extends WorldObject {
   }
 
   public ordinaryAttack(): string {
-    const unitsToAttack: Unit[] | string = utils.findUnitsAtCoordinates(this);
+    const unitsToAttack = utils.findUnitsAtCoordinates(this);
 
     if (typeof unitsToAttack === 'string') {
       return unitsToAttack;
     }
 
-    const defender: Unit = utils.chooseRandomUnit(unitsToAttack);
+    const defender = utils.chooseRandomUnit(unitsToAttack);
 
     const { attackerDamage, defenderDamage }:FightDamage = utils.resolveOrdinaryFight(this,defender);
 
-    const deadUnits: number = utils.clearBattlefield([this, defender]);
+    const deadUnits = utils.clearBattlefield([this, defender]);
 
     return `There was a fierce fight between ${this.name} and ${defender.name}.
      The defender took totally ${attackerDamage} damage. The attacker took ${defenderDamage} damage.
@@ -54,16 +54,16 @@ export class Unit extends WorldObject {
   }
 
   public ninjaAttack(): string {
-    const unitsToAttack: Unit[] | string = utils.findUnitsAtCoordinates(this);
+    const unitsToAttack = utils.findUnitsAtCoordinates(this);
 
     if (typeof unitsToAttack === 'string') {
       return unitsToAttack;
     }
 
-    const allDefendersNames: string = unitsToAttack.map((unit) => unit.name).join(', ');
+    const allDefendersNames = unitsToAttack.map((unit) => unit.name).join(', ');
 
      const  { attackerDamage, defenderDamage }:FightDamage = utils.resolveNinjaFight(this, unitsToAttack);
-     const deadUnits:number = utils.clearBattlefield(unitsToAttack);
+     const deadUnits= utils.clearBattlefield(unitsToAttack);
 
     return `There was a fierce fight between ${this.name} and ${allDefendersNames}.
     The defender took totally ${attackerDamage} damage. The attacker took ${defenderDamage} damage.
@@ -71,9 +71,14 @@ export class Unit extends WorldObject {
   }
 
   go(coordinates: string): string {
-    this.modifyPosition(coordinates)
-
-    return `Unit ${this.name} moved to ${this.position.x},${this.position.y}`;
+    const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
+    const validCoordinates = utils.checkForValidCoordinates(convertedCoordinates);
+    if(validCoordinates) {
+      this.modifyPosition(coordinates)
+      return `Unit ${this.name} moved to ${this.position.x},${this.position.y}`;
+    } else {
+      return `The position is not valid.`
+    }
   }
 
   gather(): string {

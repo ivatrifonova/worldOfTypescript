@@ -33,15 +33,15 @@ class Engine {
 
   public createUnit([, , name, position, team, type]: string[]): string {
     let newUnit: Unit;
-    const unitType:string = type.toLowerCase();
-    const unitPosition: Position = utils.createPosition(position);
+    const unitType = type.toLowerCase();
+    const unitPosition = utils.createPosition(position);
 debugger;
     
-    const validUnit:string = utils.validateUnit(name, position, team);
+    const validUnit = utils.validateUnit(name, position, team);
     
     if(validUnit) return validUnit;
     
-    const teamType:TeamType = utils.selectTeam(team);
+    const teamType = utils.selectTeam(team);
     switch (unitType) {
       case 'peasant':
         newUnit = new Unit(name,25,10,UnitType.Peasant,50,unitPosition,teamType);
@@ -64,11 +64,11 @@ debugger;
 
   public createResource([, , type, position, quantity]: string[]): string {
     let newResource: Resource;
-    const resourceType:string = type.toLowerCase();
-    const convertedQuantity:number = Number(quantity);
-    const resourcePosition:Position = utils.createPosition(position);
+    const resourceType = type.toLowerCase();
+    const convertedQuantity = Number(quantity);
+    const resourcePosition = utils.createPosition(position);
 
-    const validResource:string = utils.validateResource(resourcePosition, type, convertedQuantity);
+    const validResource = utils.validateResource(resourcePosition, type, convertedQuantity);
     if(validResource) return validResource;
 
     switch (resourceType) {
@@ -107,15 +107,15 @@ debugger;
 
   public order([, currentUnit, type, coordinates]: string[]): string {
     const unit = utils.findUnit(currentUnit);
+    if(typeof unit === "string") return unit;
+
     switch (type) {
       case 'attack':
         return unit.type === UnitType.Ninja? unit.ninjaAttack(): unit.ordinaryAttack();
-      case 'gather': {
+      case 'gather': 
         return unit.gather();
-      }
       case `go`:
-        const numberedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
-        return utils.checkForValidCoordinates(numberedCoordinates) ? unit.go(coordinates) : 'Please enter valid coordinates!';
+        return unit.go(coordinates);
       default: 
       return `The order is invalid!`; 
     }
