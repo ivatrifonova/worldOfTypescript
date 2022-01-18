@@ -1,8 +1,9 @@
-import { TeamType } from '../Enums/Enums';
+import { TeamType, UnitType } from '../Enums/Enums';
 import { engine } from '../Engine/Engine';
 import { Position } from './Position.model';
 import { Unit } from './Unit.model';
 import { FightDamage } from '../Interfaces/Interfaces';
+import { Resource } from './Resource.model';
 
 
 class Utils {
@@ -22,6 +23,7 @@ class Utils {
 
     }
   }
+
   checkForValidCoordinates(coordinates: number[]): boolean {
     const areCoordinatesValid = coordinates.every(coordinate => !isNaN(coordinate));
     return areCoordinatesValid;
@@ -29,7 +31,8 @@ class Utils {
 
 
   validateName(name: string): string {
-    let doesNameExist = engine.units.some((unit) => unit.name === name);
+    let doesNameExist:boolean = engine.units.some((unit) => unit.name === name);
+
     if (!doesNameExist && name.length < 20) return '';
     else if (doesNameExist) {
       return `The name ${name} already exist`;
@@ -39,7 +42,7 @@ class Utils {
   }
 
   checkPlaceForAvailability(position: Position): string {
-    let place = engine.resources.some(
+    let place:boolean = engine.resources.some(
       (unit) => unit.position.x === position.x && unit.position.y === position.y
     );
     if (place) return `This place is already taken.`;
@@ -54,9 +57,10 @@ class Utils {
   }
 
   validateUnit(name: string, position: string, team: string): string {
-    const validNameMessage = utils.validateName(name);
-    const validPositionMessage = utils.validatePosition(position);
-    const validTeam = utils.validateTeam(team);
+    const validNameMessage:string = utils.validateName(name);
+    const validPositionMessage:string = utils.validatePosition(position);
+    const validTeam:string = utils.validateTeam(team);
+    
     if (validPositionMessage) return validPositionMessage;
     else if(validTeam) return validTeam;
     else return validNameMessage;
@@ -70,9 +74,9 @@ class Utils {
   }
 
   validateResource(position: Position, type: string, quantity: number): string {
-    const availablePlaceMessage = this.checkPlaceForAvailability(position);
-    const validResourceTypeMessage = this.checkResourceType(type);
-    const validQuantityMessage = this.checkQuantity(quantity);
+    const availablePlaceMessage:string = this.checkPlaceForAvailability(position);
+    const validResourceTypeMessage:string = this.checkResourceType(type);
+    const validQuantityMessage:string = this.checkQuantity(quantity);
 
     if (availablePlaceMessage) return availablePlaceMessage;
     else if (validResourceTypeMessage) return validResourceTypeMessage;
@@ -87,14 +91,12 @@ class Utils {
   }
 
   createPosition(coordinates: string): Position {
-    const positionCoordinates =
-      utils.convertCoordinatesFromStringToNumber(coordinates);
+    const positionCoordinates:number[] = utils.convertCoordinatesFromStringToNumber(coordinates);
     return new Position(positionCoordinates[0], positionCoordinates[1]);
   }
 
   validatePosition(coordinates: string) {
-    const convertedCoordinates =
-      utils.convertCoordinatesFromStringToNumber(coordinates);
+    const convertedCoordinates:number[] = utils.convertCoordinatesFromStringToNumber(coordinates);
     if (convertedCoordinates[0] < 0 || convertedCoordinates[1] < 0) {
       return `Coordinates are not valid.`;
     }
@@ -102,15 +104,13 @@ class Utils {
   }
 
   findUnit(unitName: string): Unit {
-    let wantedUnit = engine.units.find(
-      (currentUnit) => currentUnit.name === unitName
-    );
+    let wantedUnit:Unit | undefined = engine.units.find((currentUnit) => currentUnit.name === unitName);
     if (wantedUnit) return wantedUnit;
     else throw new Error(`This user does not exist.`);
   }
 
   findUnitsAtCoordinates({ position, team, name }: Unit): Unit[] | string {
-    let unitsAtSameCoordinates = engine.units.filter(
+    let unitsAtSameCoordinates:Unit[] = engine.units.filter(
       (unit) =>
         unit.position.x === position.x &&
         unit.position.y === position.y &&
@@ -127,7 +127,7 @@ class Utils {
   }
 
   chooseRandomUnit(units: Unit[]): Unit {
-    const attackedUnit = units[Math.floor(Math.random() * units.length)];
+    const attackedUnit:Unit = units[Math.floor(Math.random() * units.length)];
     return attackedUnit;
   }
 
@@ -140,16 +140,10 @@ class Utils {
   }
 
   resolveOrdinaryFight(attacker: Unit, defender: Unit): FightDamage {
-    let criticalHit = utils.isHitCritical();
+    let criticalHit:boolean = utils.isHitCritical();
 
-    let attackerDamage = utils.calculateDamage(
-      attacker.attack,
-      defender.defence
-    );
-    let defenderDamage = utils.calculateDamage(
-      defender.attack,
-      attacker.defence
-    );
+    let attackerDamage:number = utils.calculateDamage(attacker.attack,defender.defence);
+    let defenderDamage:number = utils.calculateDamage(defender.attack,attacker.defence);
 
     if (criticalHit) {
       defender.modifyHealthPoints(-attackerDamage * 2);
@@ -163,10 +157,10 @@ class Utils {
   }
 
   resolveNinjaFight(attacker: Unit, defenders: Unit[]): FightDamage {
-    let criticalHit = utils.isHitCritical();
+    let criticalHit:boolean = utils.isHitCritical();
 
-    const attackerAllDamageApplied = defenders.map((defender) => {
-      let damage = utils.calculateDamage(attacker.attack, defender.defence);
+    const attackerAllDamageApplied:number[] = defenders.map((defender) => {
+      let damage:number = utils.calculateDamage(attacker.attack, defender.defence);
 
       if (criticalHit) {
         defender.modifyHealthPoints(-damage * 2);
@@ -185,7 +179,7 @@ class Utils {
   }
 
   clearBattlefield(units: Unit[]): number {
-    let deadUnits = units.filter((unit) => {
+    let deadUnits:Unit[] = units.filter((unit) => {
       if (unit.healthPoints <= 0) {
         unit.isDestroyed = true;
         return true;
@@ -193,6 +187,24 @@ class Utils {
       return false;
     });
     return deadUnits.length;
+  }
+
+  calculateTeamPoints(team: Unit[],resources: Resource[]) {
+
+    const unitsPoints = team.reduce((unit1, unit2): number => {
+    if(unit2.type === UnitType.Giant) {
+     return unit1 + 15;
+    } else if(unit2.type === UnitType.Ninja) {
+      return unit1 + 15;
+    } else if(unit2.type === UnitType.Peasant) {
+      return unit1 + 5;
+    } else {
+      return unit1 + 10;
+    }
+    }, 0)
+  
+    const resourcesPoints = resources.reduce((resource1, resource2):number => (resource1 + resource2.healthPoints * 10),0)
+    return unitsPoints + resourcesPoints;
   }
 }
 

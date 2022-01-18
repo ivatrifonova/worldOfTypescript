@@ -77,7 +77,6 @@ export class Unit extends WorldObject {
   }
 
   gather(): string {
-    
     const resourcePresence = engine.resources.find(resource => resource.position.x === this.position.x 
       && resource.position.y === this.position.y);
 

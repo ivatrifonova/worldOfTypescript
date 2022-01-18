@@ -109,9 +109,7 @@ debugger;
     const unit = utils.findUnit(currentUnit);
     switch (type) {
       case 'attack':
-        return unit.type === UnitType.Ninja
-          ? unit.ninjaAttack()
-          : unit.ordinaryAttack();
+        return unit.type === UnitType.Ninja? unit.ninjaAttack(): unit.ordinaryAttack();
       case 'gather': {
         return unit.gather();
       }

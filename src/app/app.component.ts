@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { engine } from './Engine/Engine';
+import show from './Models/Show.model';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,9 @@ export class AppComponent {
         break;
       case 'show':
         this.outputMessages.push(engine.show(commands));
+        break;
+      case 'end': 
+       this.outputMessages.push(show.showResults())
     }
   }
 }
