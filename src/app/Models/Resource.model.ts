@@ -9,10 +9,9 @@ export class Resource extends WorldObject {
     _position: Position,
     _team: TeamType = TeamType.Neutral,
     _canMove: boolean = false,
-    _isDestroyed: boolean = false,
+    _isDestroyed: boolean = false
   ) {
     super(_isDestroyed, _healthPoints, _position, _canMove, _team);
-    
   }
 
   get type(): ResourceTypes {

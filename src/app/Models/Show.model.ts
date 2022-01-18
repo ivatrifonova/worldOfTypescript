@@ -1,5 +1,7 @@
 import { engine } from '../Engine/Engine';
+import { TeamType } from '../Enums/Enums';
 import { Unit } from './Unit.model';
+import utils from './Utils.model';
 
 class Show {
 
@@ -41,9 +43,17 @@ showAll(): string {
 }
 
 showResults() {
-    // const blueTeamPoints: number = engine.resources.reduce((prevResource, currResource) => prevResource.healthPoints + currResource)
+   const blueTeamUnits = engine.units.filter(unit => unit.team === TeamType.Blue && !unit.isDestroyed);
+   const redTeamUnits = engine.units.filter(unit => unit.team === TeamType.Red && !unit.isDestroyed);
 
-    // return blueTeamPoints;
+   const redResources = engine.gatheredResources.filter(resource => resource.team === TeamType.Red);
+   const blueResources = engine.gatheredResources.filter(resource => resource.team === TeamType.Blue);
+
+   const redPoints = utils.calculateTeamPoints(redTeamUnits, redResources);
+   const bluePoints = utils.calculateTeamPoints(blueTeamUnits, blueResources);
+
+   return `The game is over. Team  ${redPoints > bluePoints? "Red" : "Blue"} is the winner with ${redPoints > bluePoints? redPoints : bluePoints}
+   and team ${redPoints < bluePoints? "Red" : "Blue"} is the loser with ${redPoints < bluePoints? redPoints : bluePoints}.`
 }
 
 }
