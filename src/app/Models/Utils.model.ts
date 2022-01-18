@@ -7,11 +7,11 @@ import { Resource } from './Resource.model';
 
 
 class Utils {
-  convertCoordinatesFromStringToNumber(coordinates: string): number[] {
+  public convertCoordinatesFromStringToNumber(coordinates: string): number[] {
     return coordinates.split(',').map((coordinate) => Number(coordinate));
   }
 
-  selectTeam(team: string): TeamType{
+  public selectTeam(team: string): TeamType{
     const teamType = team.toUpperCase();
     switch (teamType) {
       case TeamType.Blue:
@@ -20,17 +20,16 @@ class Utils {
         return TeamType.Red;
       default: 
       return TeamType.Neutral;
-
     }
   }
 
-  checkForValidCoordinates(coordinates: number[]): boolean {
+  public checkForValidCoordinates(coordinates: number[]): boolean {
     const areCoordinatesValid = coordinates.every(coordinate => !isNaN(coordinate));
     return areCoordinatesValid;
   }
 
 
-  validateName(name: string): string {
+  public validateName(name: string): string {
     let doesNameExist = engine.units.some((unit) => unit.name === name);
 
     if (!doesNameExist && name.length < 20) return '';
@@ -41,7 +40,7 @@ class Utils {
     }
   }
 
-  checkPlaceForAvailability(position: Position): string {
+  public checkPlaceForAvailability(position: Position): string {
     let place = engine.resources.some(
       (unit) => unit.position.x === position.x && unit.position.y === position.y
     );
@@ -49,14 +48,14 @@ class Utils {
     else return '';
   }
 
-  checkResourceType(type: string): string {
+  public checkResourceType(type: string): string {
     if (type !== 'iron' && type !== 'lumber' && type !== 'food') {
       return `Resource type ${type} does not exist!`;
     }
     return '';
   }
 
-  validateUnit(name: string, position: string, team: string): string {
+  public validateUnit(name: string, position: string, team: string): string {
     const validNameMessage = utils.validateName(name);
     const validPositionMessage = utils.validatePosition(position);
     const validTeam = utils.validateTeam(team);
@@ -66,14 +65,14 @@ class Utils {
     else return validNameMessage;
   }
    
-  validateTeam(team: string): string {
+  public validateTeam(team: string): string {
     let teamType = team.toUpperCase();
     if(teamType === TeamType.Red) return "";
     else if(teamType === TeamType.Blue) return '';
     else return "Team type is not valid!";
   }
 
-  validateResource(position: Position, type: string, quantity: number): string {
+  public validateResource(position: Position, type: string, quantity: number): string {
     const availablePlaceMessage = this.checkPlaceForAvailability(position);
     const validResourceTypeMessage = this.checkResourceType(type);
     const validQuantityMessage = this.checkQuantity(quantity);
@@ -83,19 +82,19 @@ class Utils {
     else return validQuantityMessage;
   }
 
-  checkQuantity(quantity: number) {
+  public checkQuantity(quantity: number) {
     if (quantity < 1) {
       return 'Please provide valid quantity!';
     }
     return '';
   }
 
-  createPosition(coordinates: string): Position {
+  public createPosition(coordinates: string): Position {
     const positionCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
     return new Position(positionCoordinates[0], positionCoordinates[1]);
   }
 
-  validatePosition(coordinates: string) {
+  public validatePosition(coordinates: string) {
     const convertedCoordinates = utils.convertCoordinatesFromStringToNumber(coordinates);
     if (convertedCoordinates[0] < 0 || convertedCoordinates[1] < 0) {
       return `Coordinates are not valid.`;
@@ -103,13 +102,13 @@ class Utils {
     return '';
   }
 
-  findUnit(unitName: string): Unit | string {
+  public findUnit(unitName: string): Unit | string {
     let wantedUnit = engine.units.find((currentUnit) => currentUnit.name === unitName);
     if (wantedUnit) return wantedUnit;
     else return `This user does not exist.`;
   }
 
-  findUnitsAtCoordinates({ position, team, name }: Unit): Unit[] | string {
+  public findUnitsAtCoordinates({ position, team, name }: Unit): Unit[] | string {
     let unitsAtSameCoordinates = engine.units.filter(
       (unit) =>
         unit.position.x === position.x &&
@@ -126,20 +125,20 @@ class Utils {
     }
   }
 
-  chooseRandomUnit(units: Unit[]): Unit {
+  public chooseRandomUnit(units: Unit[]): Unit {
     const attackedUnit = units[Math.floor(Math.random() * units.length)];
     return attackedUnit;
   }
 
-  isHitCritical(): boolean {
+  public isHitCritical(): boolean {
     return Math.random() * 100 > 49;
   }
 
-  calculateDamage(attack: number, defence: number): number {
+  public calculateDamage(attack: number, defence: number): number {
     return attack - defence;
   }
 
-  resolveOrdinaryFight(attacker: Unit, defender: Unit): FightDamage {
+  public resolveOrdinaryFight(attacker: Unit, defender: Unit): FightDamage {
     let criticalHit = utils.isHitCritical();
 
     let attackerDamage = utils.calculateDamage(attacker.attack,defender.defence);
@@ -156,7 +155,7 @@ class Utils {
     return { attackerDamage, defenderDamage };
   }
 
-  resolveNinjaFight(attacker: Unit, defenders: Unit[]): FightDamage {
+  public resolveNinjaFight(attacker: Unit, defenders: Unit[]): FightDamage {
     let criticalHit = utils.isHitCritical();
 
     const attackerAllDamageApplied = defenders.map((defender) => {
@@ -178,7 +177,7 @@ class Utils {
     return { attackerDamage: sumDamage, defenderDamage: 0 };
   }
 
-  clearBattlefield(units: Unit[]): number {
+  public clearBattlefield(units: Unit[]): number {
     let deadUnits = units.filter((unit) => {
       if (unit.healthPoints <= 0) {
         unit.isDestroyed = true;
@@ -189,7 +188,7 @@ class Utils {
     return deadUnits.length;
   }
 
-  calculateTeamPoints(team: Unit[],resources: Resource[]) {
+  public calculateTeamPoints(team: Unit[],resources: Resource[]) {
 
     const unitsPoints = team.reduce((unit1, unit2): number => {
     if(unit2.type === UnitType.Giant) {
