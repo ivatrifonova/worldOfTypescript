@@ -1,6 +1,6 @@
 import WorldObject from './worldObject.model';
 import { UnitType, TeamType } from '../Enums/Enums';
-import { Position } from '../Interfaces/Interfaces';
+import { Position, FightDamage } from '../Interfaces/Interfaces';
 import utils from './Utils.model';
 
 export class Unit extends WorldObject {
@@ -18,64 +18,58 @@ export class Unit extends WorldObject {
   ) {
     super(_isDestroyed, _healthPoints, _position, _canMove, _team);
   }
-  get name(): string {
+  public get name(): string {
     return this._name;
   }
 
-  get type(): string {
+  public get type(): string {
     return this._type;
   }
 
-  get attack(): number {
+  public get attack(): number {
     return this._attack;
   }
 
-  get defence(): number {
+  public get defence(): number {
     return this._defence;
   }
 
-  ordinaryAttack(): string {
-    let unitsToAttack = utils.findUnitsAtCoordinates(this.position, this.team, this.name);
-    let deadUnits: number = 0;
+  public ordinaryAttack(): string {
+    const unitsToAttack: Unit[] | string = utils.findUnitsAtCoordinates(this);
 
     if (typeof unitsToAttack === 'string') {
       return unitsToAttack;
     }
-    let randomUnitForAttack = utils.chooseRandomUnit(unitsToAttack);
 
-    let criticalHit = utils.isHitCritical();
-    let attackerDamage = utils.calculateDamage(this.attack, randomUnitForAttack.defence);
+    const defender: Unit = utils.chooseRandomUnit(unitsToAttack);
 
-    if (criticalHit) {
-      randomUnitForAttack.modifyHealthPoints(-attackerDamage * 2);
-      attackerDamage *= 2;
-    } else {
-      randomUnitForAttack.modifyHealthPoints(-attackerDamage);
-    }
+    const { attackerDamage, defenderDamage }:FightDamage = utils.resolveOrdinaryFight(this,defender);
 
-    let defenderDamage = utils.calculateDamage(randomUnitForAttack.attack, this.defence);
-    this.modifyHealthPoints(-defenderDamage);
-    console.log(this.healthPoints)
-    console.log(randomUnitForAttack.healthPoints)
+    const deadUnits: number = utils.clearBattlefield([this, defender]);
 
-    if (this.healthPoints <= 0) {
-      this.isDestroyed = true;
-      deadUnits += 1;
-    } else if (randomUnitForAttack.healthPoints < 0) {
-      randomUnitForAttack.isDestroyed = true;
-      deadUnits += 1;
-    }
-
-    return `There was a fierce fight between ${this.name} and ${randomUnitForAttack.name}.
+    return `There was a fierce fight between ${this.name} and ${defender.name}.
      The defender took totally ${attackerDamage} damage. The attacker took ${defenderDamage} damage.
       There are ${deadUnits} dead units after the fight was over`;
   }
 
-  ninjaAttack(): string {
-    return '';
+  public ninjaAttack(): string {
+    const unitsToAttack: Unit[] | string = utils.findUnitsAtCoordinates(this);
+
+    if (typeof unitsToAttack === 'string') {
+      return unitsToAttack;
+    }
+
+    const allDefendersNames: string = unitsToAttack.map((unit) => unit.name).join(', ');
+
+     const  { attackerDamage, defenderDamage }:FightDamage = utils.resolveNinjaFight(this, unitsToAttack);
+     const deadUnits:number = utils.clearBattlefield(unitsToAttack);
+
+    return `There was a fierce fight between ${this.name} and ${allDefendersNames}.
+    The defender took totally ${attackerDamage} damage. The attacker took ${defenderDamage} damage.
+     There are ${deadUnits} dead units after the fight was over`;
   }
 
-  gather(): string {
-    return "";
+  public gather(): string {
+    return '';
   }
 }

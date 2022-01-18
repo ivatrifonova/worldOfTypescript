@@ -1,8 +1,9 @@
 import { Unit } from '../Models/Unit.model';
 import { Resource } from '../Models/Resource.model';
-import { UnitType, ResourceTypes } from '../Enums/Enums';
+import { UnitType, ResourceTypes, TeamType } from '../Enums/Enums';
 import utils from '../Models/Utils.model';
 import show from '../Models/Show.model';
+import { Position } from '../Models/Position.model';
 
 class Engine {
   private _units: Unit[];
@@ -22,63 +23,27 @@ class Engine {
 
   public createUnit([, , name, position, team, type]: string[]): string {
     let newUnit: Unit;
-    const unitType = type.toLowerCase();
-    const unitPosition = utils.createPosition(position);
-    const teamType = utils.selectTeam(team);
-
-    const validPositionMessage = utils.validatePosition(position);
-    const validNameMessage = utils.validateName(name);
-
-    if (validPositionMessage || validNameMessage) {
-      return validNameMessage ? validNameMessage : validPositionMessage;
-    }
+    const unitType:string = type.toLowerCase();
+    const unitPosition: Position = utils.createPosition(position);
+debugger;
+    
+    const validUnit:string = utils.validateUnit(name, position, team);
+    
+    if(validUnit) return validUnit;
+    
+    const teamType:TeamType = utils.selectTeam(team);
     switch (unitType) {
       case 'peasant':
-        newUnit = new Unit(
-          name,
-          25,
-          10,
-          UnitType.Peasant,
-          50,
-          unitPosition,
-          teamType
-        );
+        newUnit = new Unit(name,25,10,UnitType.Peasant,50,unitPosition,teamType);
         break;
       case 'guard':
-        newUnit = new Unit(
-          name,
-          30,
-          20,
-          UnitType.Guard,
-          80,
-          unitPosition,
-          teamType,
-          false
-        );
+        newUnit = new Unit(name,30,20,UnitType.Guard,80,unitPosition,teamType,false);
         break;
       case 'ninja':
-        newUnit = new Unit(
-          name,
-          50,
-          10,
-          UnitType.Ninja,
-          80,
-          unitPosition,
-          teamType,
-          false
-        );
+        newUnit = new Unit(name,50,10,UnitType.Ninja,80,unitPosition,teamType,false);
         break;
       case 'giant':
-        newUnit = new Unit(
-          name,
-          40,
-          20,
-          UnitType.Giant,
-          90,
-          unitPosition,
-          teamType,
-          true
-        );
+        newUnit = new Unit(name,40,20,UnitType.Giant,90,unitPosition,teamType,true);
         break;
       default:
         return `Unit type ${type} does not exist!`;
@@ -89,46 +54,29 @@ class Engine {
 
   public createResource([, , type, position, quantity]: string[]): string {
     let newResource: Resource;
-    const resourceType = type.toLowerCase();
-    const convertedQuantity = Number(quantity);
-    const resourcePosition = utils.createPosition(position);
+    const resourceType:string = type.toLowerCase();
+    const convertedQuantity:number = Number(quantity);
+    const resourcePosition:Position = utils.createPosition(position);
 
-    const availablePlaceMessage = utils.checkPlaceForAvailability(resourcePosition);
-    const validResourceTypeMessage = utils.checkResourceType(resourceType);
-    const validQualityMessage = utils.checkQuantity(convertedQuantity);
+    const validResource:string = utils.validateResource(resourcePosition, type, convertedQuantity);
+    if(validResource) return validResource;
 
-    if(availablePlaceMessage || validResourceTypeMessage || validQualityMessage ) {
-      if(availablePlaceMessage) return availablePlaceMessage;
-      else if (validResourceTypeMessage) return validResourceTypeMessage;
-      else return validQualityMessage;
-    }
-    
     switch (resourceType) {
       case 'food':
-        newResource = new Resource(
-          ResourceTypes.Food,
-          convertedQuantity,
-          resourcePosition
-        );
+        newResource = new Resource(ResourceTypes.Food,convertedQuantity,resourcePosition);
         break;
       case 'lumber':
-        newResource = new Resource(
-          ResourceTypes.Lumber,
-          convertedQuantity,
-          resourcePosition
-        );
+        newResource = new Resource(ResourceTypes.Lumber,convertedQuantity,resourcePosition);
         break;
       case 'iron':
-        newResource = new Resource(
-          ResourceTypes.Iron,
-          convertedQuantity,
-          resourcePosition
-        );
+        newResource = new Resource(ResourceTypes.Iron,convertedQuantity,resourcePosition);
         break;
       default:
         return `Resource type ${type} does not exist!`;
     }
+
     this._resources.push(newResource);
+
     return `Created ${type} at position ${position} with ${quantity} health`;
   }
 
@@ -148,23 +96,23 @@ class Engine {
   }
 
   public order([, currentUnit, type]: string[]): string {
-    const unit = utils.findUnit(currentUnit);
+    const unit:Unit = utils.findUnit(currentUnit);
+    debugger;
     switch (type) {
       case 'attack':
-        return unit.type === "ninja" ? unit.ninjaAttack() : unit.ordinaryAttack();
+        return unit.type === UnitType.Ninja
+          ? unit.ninjaAttack()
+          : unit.ordinaryAttack();
       case 'gather': {
         return unit.gather();
       }
-      default: 
-      return `The order is invalid!`; 
+      default:
+        return `The order is invalid!`;
     }
   }
   public create(commands: string[]): string {
-    return commands[1] === 'unit'
-      ? this.createUnit(commands)
-      : this.createResource(commands);
+    return commands[1] === 'unit'? this.createUnit(commands): this.createResource(commands);
   }
-
 }
 
 export const engine = new Engine();
