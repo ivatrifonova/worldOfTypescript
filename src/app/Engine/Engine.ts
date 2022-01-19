@@ -91,7 +91,7 @@ class Engine {
           name,
           constants.NINJA.attack,
           constants.NINJA.defense,
-          UnitType.Peasant,
+          UnitType.Ninja,
           false
         );
         break;
@@ -105,14 +105,14 @@ class Engine {
           name,
           constants.GIANT.attack,
           constants.GIANT.defense,
-          UnitType.Peasant,
+          UnitType.Giant,
           true
         );
         break;
       default:
         return `This unit type does not exist!`;
     }
-    this._units.push(newUnit);
+    this.units.push(newUnit);
     return `Created ${type} from ${team} team named ${name} at position ${position}.`;
   }
 
@@ -163,7 +163,7 @@ class Engine {
         return `This Resource type does not exist!`;
     }
 
-    this._resources.push(newResource);
+    this.resources.push(newResource);
 
     return `Created ${type} at position ${position} with ${quantity} health.`;
   }

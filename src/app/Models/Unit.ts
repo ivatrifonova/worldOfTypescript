@@ -6,9 +6,9 @@ import {
 } from '../Interfaces/Interfaces';
 import { engine } from '../Engine/Engine';
 import {
+  calculateDeadUnits,
   calculateResourceQuantity,
   chooseRandomUnit,
-  clearBattlefield,
   findUnitsAtCoordinates,
   moveGatheredResource,
   resolveNinjaFight,
@@ -75,7 +75,7 @@ export class Unit extends WorldObject {
     const { attackerDamage, defenderDamage }: FightDamage =
       resolveOrdinaryFight(this, defender);
 
-    const deadUnits = clearBattlefield([this, defender]);
+    const deadUnits = calculateDeadUnits([this, defender]);
 
     return `There was a fierce fight between ${this.name} and ${defender.name}.
      The defender took totally ${attackerDamage} damage. The attacker took ${defenderDamage} damage.
@@ -95,7 +95,8 @@ export class Unit extends WorldObject {
       this,
       unitsToAttack
     );
-    const deadUnits = clearBattlefield(unitsToAttack);
+
+    const deadUnits = calculateDeadUnits(unitsToAttack);
 
     return `There was a fierce fight between ${this.name} and ${allDefendersNames}.
     The defender took totally ${attackerDamage} damage. The attacker took ${defenderDamage} damage.
@@ -105,10 +106,10 @@ export class Unit extends WorldObject {
   public go(coordinates: string): string {
     const validCoordinates = validatePosition(coordinates);
     if (validCoordinates) {
+      return `The position is not valid.`;
+    } else {
       this.modifyPosition(coordinates);
       return `Unit ${this.name} moved to ${this.position.x},${this.position.y}`;
-    } else {
-      return `The position is not valid.`;
     }
   }
 
@@ -146,8 +147,10 @@ export class Unit extends WorldObject {
         resourcePresence.team
       );
 
-      return `Successfully gathered ${resourcePresence.healthPoints} ${resourcePresence.type}. 
-      Team ${this.team} now has ${teamFoodQuantity} food, ${teamLumberQuantity} lumber and ${teamIronQuantity} iron.`;
+      return `Successfully gathered ${
+        resourcePresence.healthPoints
+      } ${resourcePresence.type.toLowerCase()}. 
+      Team ${this.team.toLowerCase()} now has ${teamFoodQuantity} food, ${teamLumberQuantity} lumber and ${teamIronQuantity} iron.`;
     } else {
       return 'There is nothing to gather';
     }
