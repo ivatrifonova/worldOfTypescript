@@ -14,12 +14,16 @@ export class AppComponent {
   constructor() {}
 
   executeCommand() {
-    const commands = this.inputArea.nativeElement.value.toLowerCase().trim().split(' ');
+    const commands = this.inputArea.nativeElement.value
+      .toLowerCase()
+      .trim()
+      .split(' ');
+
     const command = commands[0];
-console.log(commands);
+debugger;
     switch (command) {
       case 'create':
-      this.outputMessages.push(engine.create(commands));
+        this.outputMessages.push(engine.create(commands));
         break;
       case 'order':
         this.outputMessages.push(engine.order(commands));
@@ -27,11 +31,11 @@ console.log(commands);
       case 'show':
         this.outputMessages.push(engine.show(commands));
         break;
-      case 'end': 
-       this.outputMessages.push(showResults())
-       break;
-       default: 
-       this.outputMessages.push(`This command does not exist.`)
+      case 'end':
+        this.outputMessages.push(showResults());
+        break;
+      default:
+        this.outputMessages.push(`This command does not exist.`);
     }
   }
 }

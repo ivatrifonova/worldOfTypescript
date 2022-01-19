@@ -3,13 +3,15 @@ import { TeamType } from '../Enums/Enums';
 import { validatePosition, calculateTeamPoints, validateTeam } from './Utils';
 
 export const showUnits = (team: string): string => {
-  let validTeam = validateTeam(team);
+  const validTeam = validateTeam(team);
   if (validTeam) {
     return validTeam;
   }
+
   const teamUnits = engine.units.filter(
     (unit) => team.toLowerCase() === unit.team.toLowerCase()
   );
+
   const neededTeamUnits = teamUnits
     .map(
       (unit) =>
@@ -18,6 +20,7 @@ export const showUnits = (team: string): string => {
         ).toString()}`
     )
     .join('; ');
+
   const message = `Team ${team} units are: ${neededTeamUnits}`;
 
   return teamUnits.length > 0 ? message : `Team ${team} has NO units!`;
@@ -32,6 +35,7 @@ export const showResources = (): string => {
         } at location ${Object.values(resource.position).toString()}`
     )
     .join('; ');
+
   return engine.resources.length > 0
     ? allResourcesMessage
     : `There are NO resources in the game!`;
@@ -50,9 +54,9 @@ export const showCoordinates = (coordinates: string): string => {
     (resource) => Object.values(resource.position).toString() === coordinates
   );
   let message: string;
-  debugger;
+
   if (unitAtLocation.length > 0 || resourceAtLocation.length > 0) {
-    let unitMessage = unitAtLocation
+    const unitMessage = unitAtLocation
       .map(
         (unit) =>
           `Unit ${
@@ -60,7 +64,7 @@ export const showCoordinates = (coordinates: string): string => {
           } of type ${unit.type.toLowerCase()} on team ${unit.team.toLowerCase()}. `
       )
       .join(' ');
-    let resourceMessage = resourceAtLocation
+    const resourceMessage = resourceAtLocation
       .map(
         (resource) =>
           `Resource ${resource.type.toLowerCase()} with health ${
@@ -85,8 +89,8 @@ export const showAll = (): string => {
   );
   const message = `The game field comprises of ${
     allUnits.length
-  }. units: ${allUnits.join('; ')}
-    ${allResources.length} resources: ${allResources.join('; ')}`;
+  } units: ${allUnits.join('; ')} | 
+  ${allResources.length} resources: ${allResources.join('; ')}`;
 
   return allUnits.length > 0 || allResources.length > 0
     ? message

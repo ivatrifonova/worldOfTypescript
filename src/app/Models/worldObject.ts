@@ -7,22 +7,22 @@ import { TeamType } from '../Enums/Enums';
 import { createPosition } from './Utils';
 
 export default abstract class WorldObject implements WorldObjectInterface {
-  private _isDestroyed: boolean = false;
+  private _isDestroyed: boolean;
   private _healthPoints: number;
   private _position: PositionInterface;
-  private _canMove: boolean = true;
+  private _canMove: boolean;
   private _team: TeamType = TeamType.Neutral;
 
   public get team(): TeamType {
     return this._team;
   }
 
-  public get canMove(): boolean {
-    return this._canMove;
-  }
-
   public set team(team: TeamType) {
     this._team = team;
+  }
+
+  public get canMove(): boolean {
+    return this._canMove;
   }
 
   public get healthPoints(): number {
@@ -30,7 +30,7 @@ export default abstract class WorldObject implements WorldObjectInterface {
   }
 
   public set healthPoints(points: number) {
-    this.healthPoints = points;
+    this._healthPoints = points;
   }
 
   public get isDestroyed(): boolean {
@@ -40,6 +40,7 @@ export default abstract class WorldObject implements WorldObjectInterface {
   public set isDestroyed(destroyed: boolean) {
     this._isDestroyed = destroyed;
   }
+
   public get position(): Position {
     return this._position;
   }
@@ -55,7 +56,11 @@ export default abstract class WorldObject implements WorldObjectInterface {
   }
 
   public modifyHealthPoints(points: number) {
-    this._healthPoints += points;
+    this.healthPoints -= points;
+
+    if (this.healthPoints <= 0) {
+      this.isDestroyed = true;
+    }
   }
 
   constructor(
