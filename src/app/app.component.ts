@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { engine } from './Engine/Engine';
-import show from './Models/Show.model';
+import { showResults } from './Models/Show';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +14,9 @@ export class AppComponent {
   constructor() {}
 
   executeCommand() {
-    const commands = this.inputArea.nativeElement.value.split(' ');
+    const commands = this.inputArea.nativeElement.value.toLowerCase().trim().split(' ');
     const command = commands[0];
-
+console.log(commands);
     switch (command) {
       case 'create':
       this.outputMessages.push(engine.create(commands));
@@ -28,7 +28,10 @@ export class AppComponent {
         this.outputMessages.push(engine.show(commands));
         break;
       case 'end': 
-       this.outputMessages.push(show.showResults())
+       this.outputMessages.push(showResults())
+       break;
+       default: 
+       this.outputMessages.push(`This command does not exist.`)
     }
   }
 }

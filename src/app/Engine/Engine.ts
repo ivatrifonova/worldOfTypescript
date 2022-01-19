@@ -1,13 +1,26 @@
-import { Unit } from '../Models/Unit.model';
-import { Resource } from '../Models/Resource.model';
+import { Unit } from '../Models/Unit';
+import { Resource } from '../Models/Resource';
 import { UnitType, ResourceTypes, TeamType } from '../Enums/Enums';
-import utils from '../Models/Utils.model';
-import show from '../Models/Show.model';
+import { constants } from './Constants';
+import {
+  createPosition,
+  validateUnit,
+  selectTeam,
+  validateResource,
+  findUnit,
+} from '../Models/Utils';
+import {
+  showAll,
+  showUnits,
+  showResources,
+  showCoordinates,
+} from '../Models/Show';
 
 class Engine {
   private _units: Unit[];
   private _resources: Resource[];
   private _gatheredResources: Resource[];
+
   constructor() {
     this._units = [];
     this._resources = [];
@@ -32,94 +45,170 @@ class Engine {
 
   public createUnit([, , name, position, team, type]: string[]): string {
     let newUnit: Unit;
-    const unitType = type.toLowerCase();
-    const unitPosition = utils.createPosition(position);
-    
-    const validUnit = utils.validateUnit(name, position, team);
-    
-    if(validUnit) return validUnit;
-    
-    const teamType = utils.selectTeam(team);
-    switch (unitType) {
+    const unitPosition = createPosition(position);
+
+    const validUnit = validateUnit(name, position, team);
+
+    if (validUnit) return validUnit;
+
+    const teamType = selectTeam(team);
+    switch (type) {
       case 'peasant':
-        newUnit = new Unit(name,25,10,UnitType.Peasant,50,unitPosition,teamType);
+        newUnit = new Unit(
+          false,
+          constants.PEASANT.health,
+          unitPosition,
+          true,
+          teamType,
+          name,
+          constants.PEASANT.attack,
+          constants.PEASANT.defense,
+          UnitType.Peasant,
+          true
+        );
         break;
       case 'guard':
-        newUnit = new Unit(name,30,20,UnitType.Guard,80,unitPosition,teamType,false);
+        newUnit = new Unit(
+          false,
+          constants.GUARD.health,
+          unitPosition,
+          true,
+          teamType,
+          name,
+          constants.GUARD.attack,
+          constants.GUARD.defense,
+          UnitType.Guard,
+          false
+        );
         break;
       case 'ninja':
-        newUnit = new Unit(name,50,10,UnitType.Ninja,80,unitPosition,teamType,false);
+        newUnit = new Unit(
+          false,
+          constants.NINJA.health,
+          unitPosition,
+          true,
+          teamType,
+          name,
+          constants.NINJA.attack,
+          constants.NINJA.defense,
+          UnitType.Peasant,
+          false
+        );
         break;
       case 'giant':
-        newUnit = new Unit(name,40,20,UnitType.Giant,90,unitPosition,teamType,true);
+        newUnit = new Unit(
+          false,
+          constants.GIANT.health,
+          unitPosition,
+          true,
+          teamType,
+          name,
+          constants.GIANT.attack,
+          constants.GIANT.defense,
+          UnitType.Peasant,
+          true
+        );
         break;
       default:
-        return `Unit type ${type} does not exist!`;
+        return `This unit type does not exist!`;
     }
     this._units.push(newUnit);
-    return `Created ${type} from ${team} team named ${name} at position ${position}`;
+    return `Created ${type} from ${team} team named ${name} at position ${position}.`;
   }
 
   public createResource([, , type, position, quantity]: string[]): string {
     let newResource: Resource;
-    const resourceType = type.toLowerCase();
     const convertedQuantity = Number(quantity);
-    const resourcePosition = utils.createPosition(position);
+    const resourcePosition = createPosition(position);
 
-    const validResource = utils.validateResource(resourcePosition, type, convertedQuantity);
-    if(validResource) return validResource;
+    const validResource = validateResource(
+      resourcePosition,
+      type,
+      convertedQuantity
+    );
+    if (validResource) return validResource;
 
-    switch (resourceType) {
+    switch (type) {
       case 'food':
-        newResource = new Resource(ResourceTypes.Food,convertedQuantity,resourcePosition);
+        newResource = new Resource(
+          false,
+          convertedQuantity,
+          resourcePosition,
+          false,
+          TeamType.Neutral,
+          ResourceTypes.Food
+        );
         break;
       case 'lumber':
-        newResource = new Resource(ResourceTypes.Lumber,convertedQuantity,resourcePosition);
+        newResource = new Resource(
+          false,
+          convertedQuantity,
+          resourcePosition,
+          false,
+          TeamType.Neutral,
+          ResourceTypes.Lumber
+        );
         break;
       case 'iron':
-        newResource = new Resource(ResourceTypes.Iron,convertedQuantity,resourcePosition);
+        newResource = new Resource(
+          false,
+          convertedQuantity,
+          resourcePosition,
+          false,
+          TeamType.Neutral,
+          ResourceTypes.Iron
+        );
         break;
       default:
-        return `Resource type ${type} does not exist!`;
+        return `This Resource type does not exist!`;
     }
 
     this._resources.push(newResource);
 
-    return `Created ${type} at position ${position} with ${quantity} health`;
+    return `Created ${type} at position ${position} with ${quantity} health.`;
   }
 
   public show([, type, team]: string[]): string {
     switch (type) {
       case 'all':
-        return show.showAll();
+        return showAll();
       case 'units':
-        return show.showUnits(team);
+        return showUnits(team);
       case 'resources':
-        return show.showResources();
+        return showResources();
       case 'coordinates':
-        return show.showCoordinates(team);
+        return showCoordinates(team);
       default:
         return `Invalid command. Available options: all, units, resources, coordinates`;
     }
   }
 
   public order([, currentUnit, type, coordinates]: string[]): string {
-    const unit = utils.findUnit(currentUnit);
-    if(typeof unit === "string") return unit;
+    const unit = findUnit(currentUnit);
+    if (typeof unit === 'string') return unit;
 
     switch (type) {
       case 'attack':
-        return unit.type === UnitType.Ninja? unit.ninjaAttack(): unit.ordinaryAttack();
-      case 'gather': 
+        return unit.type === UnitType.Ninja
+          ? unit.ninjaAttack()
+          : unit.ordinaryAttack();
+      case 'gather':
         return unit.gather();
       case `go`:
         return unit.go(coordinates);
-      default: 
-      return `The order is invalid!`; 
+      default:
+        return `The order is invalid!`;
     }
   }
   public create(commands: string[]): string {
-    return commands[1] === 'unit'? this.createUnit(commands): this.createResource(commands);
+    switch (commands[1]) {
+      case 'unit':
+        return this.createUnit(commands);
+      case 'resource':
+        return this.createResource(commands);
+      default:
+        return `You can only create unit or resource.`;
+    }
   }
 }
 
