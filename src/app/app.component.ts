@@ -20,7 +20,7 @@ export class AppComponent {
       .split(' ');
 
     const command = commands[0];
-debugger;
+
     switch (command) {
       case 'create':
         this.outputMessages.push(engine.create(commands));
