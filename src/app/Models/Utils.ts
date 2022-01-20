@@ -4,6 +4,7 @@ import { Position } from './Position';
 import { Unit } from './Unit';
 import { FightDamage } from '../Interfaces/Interfaces';
 import { Resource } from './Resource';
+import { constants } from '../Engine/Constants';
 
 export const convertCoordinatesFromStringToNumber = (
   coordinates: string
@@ -36,10 +37,15 @@ export const validateName = (name: string): string => {
   }
 };
 
-export const checkPlaceForAvailability = (position: Position): string => {
+export const checkPlaceForAvailability = (position: string): string => {
+  const convertedPosition = createPosition(position);
+
   const place = engine.resources.some(
-    (unit) => unit.position.x === position.x && unit.position.y === position.y
+    (unit) =>
+      unit.position.x === convertedPosition.x &&
+      unit.position.y === convertedPosition.y
   );
+
   if (place) {
     return `This place is already taken.`;
   } else {
@@ -65,6 +71,7 @@ export const moveGatheredResource = (resourceToMove: Resource) => {
       resource.position.x === resourceToMove.position.x &&
       resource.position.y === resourceToMove.position.y
   );
+
   engine.resources.splice(resourceIndex, 1);
   engine.gatheredResources.push(resourceToMove);
 };
@@ -122,11 +129,12 @@ export const validateTeam = (team: string): string => {
 };
 
 export const validateResource = (
-  position: Position,
+  position: string,
   type: string,
   quantity: number
 ): string => {
   const availablePlaceMessage = checkPlaceForAvailability(position);
+  const validCoordinates = validatePosition(position);
   const validResourceTypeMessage = checkResourceType(type);
   const validQuantityMessage = checkQuantity(quantity);
 
@@ -134,6 +142,8 @@ export const validateResource = (
     return availablePlaceMessage;
   } else if (validResourceTypeMessage) {
     return validResourceTypeMessage;
+  } else if (validCoordinates) {
+    return validCoordinates;
   } else {
     return validQuantityMessage;
   }
@@ -270,13 +280,13 @@ export const calculateTeamPoints = (team: Unit[], resources: Resource[]) => {
   const unitsPoints = team.reduce((unit1, unit2): number => {
     switch (unit2.type) {
       case UnitType.Giant:
-        return unit1 + 15;
+        return unit1 + constants.GIANT.endPoints;
       case UnitType.Ninja:
-        return unit1 + 15;
+        return unit1 + constants.NINJA.endPoints;
       case UnitType.Peasant:
-        return unit1 + 5;
+        return unit1 + constants.PEASANT.endPoints;
       case UnitType.Guard:
-        return unit1 + 10;
+        return unit1 + constants.GUARD.endPoints;
       default:
         return unit1 + 0;
     }

@@ -43,70 +43,75 @@ class Engine {
     this._gatheredResources = resources;
   }
 
-  public createUnit([, , name, position, team, type]: string[]): string {
+  public createUnit(
+    [, , , position, team, type]: string[],
+    name: string
+  ): string {
     let newUnit: Unit;
     const unitPosition = createPosition(position);
 
     const validUnit = validateUnit(name, position, team);
 
-    if (validUnit) return validUnit;
+    if (validUnit) {
+      return validUnit;
+    }
 
     const teamType = selectTeam(team);
     switch (type) {
       case 'peasant':
         newUnit = new Unit(
-          false,
+          constants.PEASANT.isDestroyed,
           constants.PEASANT.health,
           unitPosition,
-          true,
+          constants.PEASANT.canMove,
           teamType,
           name,
           constants.PEASANT.attack,
           constants.PEASANT.defense,
           UnitType.Peasant,
-          true
+          constants.PEASANT.canGather
         );
         break;
       case 'guard':
         newUnit = new Unit(
-          false,
+          constants.GUARD.isDestroyed,
           constants.GUARD.health,
           unitPosition,
-          true,
+          constants.GUARD.canMove,
           teamType,
           name,
           constants.GUARD.attack,
           constants.GUARD.defense,
           UnitType.Guard,
-          false
+          constants.GUARD.canGather
         );
         break;
       case 'ninja':
         newUnit = new Unit(
-          false,
+          constants.NINJA.isDestroyed,
           constants.NINJA.health,
           unitPosition,
-          true,
+          constants.NINJA.canMove,
           teamType,
           name,
           constants.NINJA.attack,
           constants.NINJA.defense,
           UnitType.Ninja,
-          false
+          constants.NINJA.canGather
         );
         break;
       case 'giant':
         newUnit = new Unit(
-          false,
+          constants.GIANT.isDestroyed,
           constants.GIANT.health,
           unitPosition,
-          true,
+          constants.GIANT.canMove,
           teamType,
           name,
           constants.GIANT.attack,
           constants.GIANT.defense,
           UnitType.Giant,
-          true
+          constants.GIANT.canGather
         );
         break;
       default:
@@ -119,42 +124,40 @@ class Engine {
   public createResource([, , type, position, quantity]: string[]): string {
     let newResource: Resource;
     const convertedQuantity = Number(quantity);
-    const resourcePosition = createPosition(position);
 
-    const validResource = validateResource(
-      resourcePosition,
-      type,
-      convertedQuantity
-    );
-    if (validResource) return validResource;
+    const validResource = validateResource(position, type, convertedQuantity);
+    const resourcePosition = createPosition(position);
+    if (validResource) {
+      return validResource;
+    }
 
     switch (type) {
       case 'food':
         newResource = new Resource(
-          false,
+          constants.RESOURCE.isDestroyed,
           convertedQuantity,
           resourcePosition,
-          false,
+          constants.RESOURCE.canMove,
           TeamType.Neutral,
           ResourceTypes.Food
         );
         break;
       case 'lumber':
         newResource = new Resource(
-          false,
+          constants.RESOURCE.isDestroyed,
           convertedQuantity,
           resourcePosition,
-          false,
+          constants.RESOURCE.canMove,
           TeamType.Neutral,
           ResourceTypes.Lumber
         );
         break;
       case 'iron':
         newResource = new Resource(
-          false,
+          constants.RESOURCE.isDestroyed,
           convertedQuantity,
           resourcePosition,
-          false,
+          constants.RESOURCE.canMove,
           TeamType.Neutral,
           ResourceTypes.Iron
         );
@@ -183,9 +186,11 @@ class Engine {
     }
   }
 
-  public order([, currentUnit, type, coordinates]: string[]): string {
-    const unit = findUnit(currentUnit);
-    if (typeof unit === 'string') return unit;
+  public order([, , type, coordinates]: string[], name: string): string {
+    const unit = findUnit(name);
+    if (typeof unit === 'string') {
+      return unit;
+    }
 
     switch (type) {
       case 'attack':
@@ -200,10 +205,10 @@ class Engine {
         return `The order is invalid!`;
     }
   }
-  public create(commands: string[]): string {
+  public create(commands: string[], name: string): string {
     switch (commands[1]) {
       case 'unit':
-        return this.createUnit(commands);
+        return this.createUnit(commands, name);
       case 'resource':
         return this.createResource(commands);
       default:

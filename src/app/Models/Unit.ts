@@ -68,6 +68,8 @@ export class Unit extends WorldObject {
 
     if (typeof unitsToAttack === 'string') {
       return unitsToAttack;
+    } else if (this.isDestroyed) {
+      return 'This unit is dead!';
     }
 
     const defender = chooseRandomUnit(unitsToAttack);
@@ -87,6 +89,8 @@ export class Unit extends WorldObject {
 
     if (typeof unitsToAttack === 'string') {
       return unitsToAttack;
+    } else if (this.isDestroyed) {
+      return 'This unit is dead!';
     }
 
     const allDefendersNames = unitsToAttack.map((unit) => unit.name).join(', ');
@@ -107,6 +111,8 @@ export class Unit extends WorldObject {
     const validCoordinates = validatePosition(coordinates);
     if (validCoordinates) {
       return `The position is not valid.`;
+    } else if (this.isDestroyed) {
+      return 'This unit is dead!';
     } else {
       this.modifyPosition(coordinates);
       return `Unit ${this.name} moved to ${this.position.x},${this.position.y}`;
@@ -114,6 +120,10 @@ export class Unit extends WorldObject {
   }
 
   public gather(): string {
+    if (this.isDestroyed) {
+      return 'This unit is dead!';
+    }
+
     const resourcePresence = engine.resources.find(
       (resource) =>
         resource.position.x === this.position.x &&
