@@ -1,5 +1,5 @@
-import { Unit } from '../Models/Unit';
-import { Resource } from '../Models/Resource';
+import { Unit } from '../Classes/Unit';
+import { Resource } from '../Classes/Resource';
 import { UnitType, ResourceTypes, TeamType } from '../Enums/Enums';
 import { constants } from './Constants';
 import {
@@ -8,15 +8,16 @@ import {
   selectTeam,
   validateResource,
   findUnit,
-} from '../Models/Utils';
+} from '../Classes/Utils';
 import {
   showAll,
   showUnits,
   showResources,
   showCoordinates,
-} from '../Models/Show';
+} from '../Classes/Show';
+import { Engine as EngineInterface, Resource as ResourceInterface } from '../Interfaces/Interfaces';
 
-class Engine {
+class Engine implements EngineInterface {
   private _units: Unit[];
   private _resources: Resource[];
   private _gatheredResources: Resource[];
@@ -35,12 +36,8 @@ class Engine {
     return this._resources;
   }
 
-  public get gatheredResources(): Resource[] {
+  public get gatheredResources(): ResourceInterface[] {
     return this._gatheredResources;
-  }
-
-  public set gatheredResources(resources) {
-    this._gatheredResources = resources;
   }
 
   public createUnit(

@@ -2,7 +2,7 @@ import { ResourceTypes, TeamType, UnitType } from '../Enums/Enums';
 import { engine } from '../Engine/Engine';
 import { Position } from './Position';
 import { Unit } from './Unit';
-import { FightDamage } from '../Interfaces/Interfaces';
+import { FightDamage, Resource as ResourceInterface } from '../Interfaces/Interfaces';
 import { Resource } from './Resource';
 import { constants } from '../Engine/Constants';
 
@@ -276,7 +276,7 @@ export const calculateDeadUnits = (units: Unit[]): number => {
   return deadUnits.length;
 };
 
-export const calculateTeamPoints = (team: Unit[], resources: Resource[]) => {
+export const calculateTeamPoints = (team: Unit[], resources: ResourceInterface[]) => {
   const unitsPoints = team.reduce((unit1, unit2): number => {
     switch (unit2.type) {
       case UnitType.Giant:

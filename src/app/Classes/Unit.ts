@@ -3,6 +3,7 @@ import { UnitType, TeamType } from '../Enums/Enums';
 import {
   FightDamage,
   Position as PositionInterface,
+  Unit as UnitInterface,
 } from '../Interfaces/Interfaces';
 import { engine } from '../Engine/Engine';
 import {
@@ -16,7 +17,7 @@ import {
   validatePosition,
 } from './Utils';
 
-export class Unit extends WorldObject {
+export class Unit extends WorldObject implements UnitInterface {
   private _name: string;
   private _attack: number;
   private _defence: number;
@@ -27,16 +28,15 @@ export class Unit extends WorldObject {
     return this._name;
   }
 
-  public get type(): string {
-    return this._type;
-  }
-
   public get attack(): number {
     return this._attack;
   }
 
   public get defence(): number {
     return this._defence;
+  }
+  public get type(): UnitType {
+    return this._type;
   }
 
   public get canGather(): boolean {

@@ -1,8 +1,8 @@
 import WorldObject from './worldObject';
 import { ResourceTypes, TeamType } from '../Enums/Enums';
-import { Position as PositionInterface } from '../Interfaces/Interfaces';
+import { Position as PositionInterface, Resource as ResourceInterface} from '../Interfaces/Interfaces';
 
-export class Resource extends WorldObject {
+export class Resource extends WorldObject implements ResourceInterface {
   private _type: ResourceTypes;
 
   public get type(): ResourceTypes {
