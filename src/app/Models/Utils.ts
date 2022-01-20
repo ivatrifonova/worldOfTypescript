@@ -36,9 +36,13 @@ export const validateName = (name: string): string => {
   }
 };
 
-export const checkPlaceForAvailability = (position: Position): string => {
+export const checkPlaceForAvailability = (position: string): string => {
+  const convertedPosition = createPosition(position);
+
   const place = engine.resources.some(
-    (unit) => unit.position.x === position.x && unit.position.y === position.y
+    (unit) =>
+      unit.position.x === convertedPosition.x &&
+      unit.position.y === convertedPosition.y
   );
 
   if (place) {
@@ -124,11 +128,12 @@ export const validateTeam = (team: string): string => {
 };
 
 export const validateResource = (
-  position: Position,
+  position: string,
   type: string,
   quantity: number
 ): string => {
   const availablePlaceMessage = checkPlaceForAvailability(position);
+  const validCoordinates = validatePosition(position);
   const validResourceTypeMessage = checkResourceType(type);
   const validQuantityMessage = checkQuantity(quantity);
 
@@ -136,6 +141,8 @@ export const validateResource = (
     return availablePlaceMessage;
   } else if (validResourceTypeMessage) {
     return validResourceTypeMessage;
+  } else if (validCoordinates) {
+    return validCoordinates;
   } else {
     return validQuantityMessage;
   }

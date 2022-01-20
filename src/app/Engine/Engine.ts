@@ -121,14 +121,13 @@ class Engine {
   public createResource([, , type, position, quantity]: string[]): string {
     let newResource: Resource;
     const convertedQuantity = Number(quantity);
-    const resourcePosition = createPosition(position);
-
+  
     const validResource = validateResource(
-      resourcePosition,
+      position,
       type,
       convertedQuantity
     );
-
+    const resourcePosition = createPosition(position);
     if (validResource) {
       return validResource;
     }
