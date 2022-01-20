@@ -6,6 +6,7 @@ export const constants = {
     isDestroyed: false,
     canMove: true,
     canGather: true,
+    endPoints: 15,
   },
 
   PEASANT: {
@@ -15,6 +16,7 @@ export const constants = {
     isDestroyed: false,
     canMove: true,
     canGather: true,
+    endPoints: 5,
   },
 
   GUARD: {
@@ -24,6 +26,7 @@ export const constants = {
     isDestroyed: false,
     canMove: true,
     canGather: false,
+    endPoints: 10,
   },
 
   NINJA: {
@@ -33,6 +36,7 @@ export const constants = {
     isDestroyed: false,
     canMove: true,
     canGather: false,
+    endPoints: 15,
   },
 
   RESOURCE: {

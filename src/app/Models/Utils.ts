@@ -4,6 +4,7 @@ import { Position } from './Position';
 import { Unit } from './Unit';
 import { FightDamage } from '../Interfaces/Interfaces';
 import { Resource } from './Resource';
+import { constants } from '../Engine/Constants';
 
 export const convertCoordinatesFromStringToNumber = (
   coordinates: string
@@ -279,13 +280,13 @@ export const calculateTeamPoints = (team: Unit[], resources: Resource[]) => {
   const unitsPoints = team.reduce((unit1, unit2): number => {
     switch (unit2.type) {
       case UnitType.Giant:
-        return unit1 + 15;
+        return unit1 + constants.GIANT.endPoints;
       case UnitType.Ninja:
-        return unit1 + 15;
+        return unit1 + constants.NINJA.endPoints;
       case UnitType.Peasant:
-        return unit1 + 5;
+        return unit1 + constants.PEASANT.endPoints;
       case UnitType.Guard:
-        return unit1 + 10;
+        return unit1 + constants.GUARD.endPoints;
       default:
         return unit1 + 0;
     }
