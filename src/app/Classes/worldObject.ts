@@ -49,20 +49,6 @@ export default abstract class WorldObject implements WorldObjectInterface {
     this._position = position;
   }
 
-  public modifyPosition(coordinates: string) {
-    const position = createPosition(coordinates);
-
-    this.position = position;
-  }
-
-  public modifyHealthPoints(points: number) {
-    this.healthPoints -= points;
-
-    if (this.healthPoints <= 0) {
-      this.isDestroyed = true;
-    }
-  }
-
   constructor(
     isDestroyed: boolean,
     healthPoints: number,
@@ -75,5 +61,19 @@ export default abstract class WorldObject implements WorldObjectInterface {
     this._position = position;
     this._canMove = canMove;
     this._team = team;
+  }
+  
+  public modifyPosition(coordinates: string) {
+    const position = createPosition(coordinates);
+
+    this.position = position;
+  }
+
+  public modifyHealthPoints(points: number) {
+    this.healthPoints -= points;
+
+    if (this.healthPoints <= 0) {
+      this.isDestroyed = true;
+    }
   }
 }

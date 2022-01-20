@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { engine } from './Engine/Engine';
-import { showResults } from './Models/Show';
+import { showResults } from './Classes/Show';
 
 @Component({
   selector: 'app-root',

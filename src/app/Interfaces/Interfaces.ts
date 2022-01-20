@@ -22,4 +22,6 @@ export interface WorldObject {
   position: Position;
   canMove: boolean;
   team: TeamType;
+  modifyPosition(coordinates: string):void;
+  modifyHealthPoints(points:number):void;
 }
