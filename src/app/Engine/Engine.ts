@@ -5,7 +5,6 @@ import { constants } from './Constants';
 import {
   createPosition,
   validateUnit,
-  selectTeam,
   validateResource,
   findUnit,
 } from '../Classes/Utils';
@@ -46,14 +45,20 @@ class Engine implements EngineInterface {
   ): string {
     let newUnit: Unit;
     const unitPosition = createPosition(position);
-
+    
     const validUnit = validateUnit(name, position, team);
 
     if (validUnit) {
       return validUnit;
     }
 
-    const teamType = selectTeam(team);
+    let teamType: TeamType;
+    if (team.toUpperCase() === TeamType.Blue) {
+      teamType = TeamType.Blue;
+    } else {
+      teamType = TeamType.Red;
+    }
+
     switch (type) {
       case 'peasant':
         newUnit = new Unit(
