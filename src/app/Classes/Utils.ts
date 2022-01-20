@@ -12,19 +12,6 @@ export const convertCoordinatesFromStringToNumber = (
   return coordinates.split(',').map((coordinate) => Number(coordinate));
 };
 
-export const selectTeam = (team: string): TeamType => {
-  const teamType = team.toUpperCase();
-
-  switch (teamType) {
-    case TeamType.Blue:
-      return TeamType.Blue;
-    case TeamType.Red:
-      return TeamType.Red;
-    default:
-      return TeamType.Neutral;
-  }
-};
-
 export const validateName = (name: string): string => {
   const doesNameExist = engine.units.some((unit) => unit.name === name);
 
@@ -165,14 +152,12 @@ export const createPosition = (coordinates: string): Position => {
 export const validatePosition = (coordinates: string) => {
   const convertedCoordinates =
     convertCoordinatesFromStringToNumber(coordinates);
-  const areCoordinatesValid = convertedCoordinates.every(
-    (coordinate) => !isNaN(coordinate)
+  const areCoordinatesInvalid = convertedCoordinates.some(
+    (coordinate) => isNaN(coordinate)
   );
   if (
-    convertedCoordinates[0] < 0 ||
-    convertedCoordinates[1] < 0 ||
-    !areCoordinatesValid ||
-    convertedCoordinates.length < 2
+    areCoordinatesInvalid ||
+    convertedCoordinates.length !== 2
   ) {
     return `Coordinates are not valid.`;
   } else {
