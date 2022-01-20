@@ -11,19 +11,20 @@ export class AppComponent {
   public outputMessages: string[] = [];
   @ViewChild('inputArea') inputArea: ElementRef;
 
-  constructor() {}
-
   executeCommand() {
-    const commands = this.inputArea.nativeElement.value
-      .toLowerCase()
+    let commands = this.inputArea.nativeElement.value
       .trim()
       .split(' ');
+    
+    const name = commands[2];
+
+    commands = commands.map((command: string) => command.toLowerCase())
 
     const command = commands[0];
 
     switch (command) {
       case 'create':
-        this.outputMessages.push(engine.create(commands));
+        this.outputMessages.push(engine.create(commands, name));
         break;
       case 'order':
         this.outputMessages.push(engine.order(commands));

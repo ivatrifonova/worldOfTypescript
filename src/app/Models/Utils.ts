@@ -40,6 +40,7 @@ export const checkPlaceForAvailability = (position: Position): string => {
   const place = engine.resources.some(
     (unit) => unit.position.x === position.x && unit.position.y === position.y
   );
+
   if (place) {
     return `This place is already taken.`;
   } else {
@@ -65,6 +66,7 @@ export const moveGatheredResource = (resourceToMove: Resource) => {
       resource.position.x === resourceToMove.position.x &&
       resource.position.y === resourceToMove.position.y
   );
+
   engine.resources.splice(resourceIndex, 1);
   engine.gatheredResources.push(resourceToMove);
 };
