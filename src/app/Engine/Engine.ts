@@ -15,8 +15,9 @@ import {
   showResources,
   showCoordinates,
 } from '../Classes/Show';
+import { Engine as EngineInterface, Resource as ResourceInterface } from '../Interfaces/Interfaces';
 
-class Engine {
+class Engine implements EngineInterface {
   private _units: Unit[];
   private _resources: Resource[];
   private _gatheredResources: Resource[];
@@ -35,12 +36,8 @@ class Engine {
     return this._resources;
   }
 
-  public get gatheredResources(): Resource[] {
+  public get gatheredResources(): ResourceInterface[] {
     return this._gatheredResources;
-  }
-
-  public set gatheredResources(resources) {
-    this._gatheredResources = resources;
   }
 
   public createUnit(
