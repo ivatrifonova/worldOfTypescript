@@ -43,7 +43,10 @@ class Engine {
     this._gatheredResources = resources;
   }
 
-  public createUnit([, , , position, team, type]: string[], name:string): string {
+  public createUnit(
+    [, , , position, team, type]: string[],
+    name: string
+  ): string {
     let newUnit: Unit;
     const unitPosition = createPosition(position);
 
@@ -51,7 +54,7 @@ class Engine {
 
     if (validUnit) {
       return validUnit;
-    } 
+    }
 
     const teamType = selectTeam(team);
     switch (type) {
@@ -121,12 +124,8 @@ class Engine {
   public createResource([, , type, position, quantity]: string[]): string {
     let newResource: Resource;
     const convertedQuantity = Number(quantity);
-  
-    const validResource = validateResource(
-      position,
-      type,
-      convertedQuantity
-    );
+
+    const validResource = validateResource(position, type, convertedQuantity);
     const resourcePosition = createPosition(position);
     if (validResource) {
       return validResource;
@@ -187,8 +186,8 @@ class Engine {
     }
   }
 
-  public order([, currentUnit, type, coordinates]: string[]): string {
-    const unit = findUnit(currentUnit);
+  public order([, , type, coordinates]: string[], name: string): string {
+    const unit = findUnit(name);
     if (typeof unit === 'string') {
       return unit;
     }
@@ -206,7 +205,7 @@ class Engine {
         return `The order is invalid!`;
     }
   }
-  public create(commands: string[], name:string): string {
+  public create(commands: string[], name: string): string {
     switch (commands[1]) {
       case 'unit':
         return this.createUnit(commands, name);
